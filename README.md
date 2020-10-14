@@ -21,17 +21,19 @@ Originally I planned to implement it as a Rainmeter widget, but failed for all s
 - [x] Todo item data structure
 - [x] List view of items
 - [x] Add button
-- [ ] Separator
-- [ ] Input textboxes
-- [ ] Handling adding new items
-    - [ ] Building domain model from inputs
+- [x] Separator
+- [x] Input textboxes
+- [x] Handling adding new items
+    - [x] Building domain model from inputs
     - [x] Adding & Sorting
 - [x] Handling removing items
-- [ ] Change color of due dates
 - [x] Draggable interface
-- [ ] Keep on desktop
-- [ ] Show in notification area
-- [ ] An icon
-- [ ] Read from/write to file
+- [x] Keep on desktop
+- [x] Show in notification area
+    - [x] Setting transparency
+    - [x] Switching between light/dark mode
+    - [x] Exit
+- [x] An icon
+- [x] Read from/write to file
+- [x] Embed fonts
 - [ ] Start on bootup
-- [ ] Others ...

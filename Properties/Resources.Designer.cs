@@ -59,5 +59,35 @@ namespace ToDue.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] ConservativeSimplicity {
+            get {
+                object obj = ResourceManager.GetObject("ConservativeSimplicity", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
+        internal static System.Drawing.Icon icon__256x256_ {
+            get {
+                object obj = ResourceManager.GetObject("icon__256x256_", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] segmdl2 {
+            get {
+                object obj = ResourceManager.GetObject("segmdl2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

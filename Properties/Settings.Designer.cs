@@ -22,5 +22,65 @@ namespace ToDue.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point StartupLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["StartupLocation"]));
+            }
+            set {
+                this["StartupLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"AAEAAAD/////AQAAAAAAAAAMAgAAADxUb0R1ZSwgVmVyc2lvbj0xLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGwEAQAAAHFTeXN0ZW0uQ29sbGVjdGlvbnMuR2VuZXJpYy5MaXN0YDFbW1RvRHVlLlRvZG9JdGVtLCBUb0R1ZSwgVmVyc2lvbj0xLjAuMC4wLCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPW51bGxdXQMAAAAGX2l0ZW1zBV9zaXplCF92ZXJzaW9uBAAAEFRvRHVlLlRvZG9JdGVtW10CAAAACAgJAwAAAAAAAAAEAAAABwMAAAAAAQAAAAQAAAAEDlRvRHVlLlRvZG9JdGVtAgAAAA0ECw==")]
+        public string TodoItems {
+            get {
+                return ((string)(this["TodoItems"]));
+            }
+            set {
+                this["TodoItems"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public double Opacity {
+            get {
+                return ((double)(this["Opacity"]));
+            }
+            set {
+                this["Opacity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IsLightMode {
+            get {
+                return ((bool)(this["IsLightMode"]));
+            }
+            set {
+                this["IsLightMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Counter {
+            get {
+                return ((int)(this["Counter"]));
+            }
+            set {
+                this["Counter"] = value;
+            }
+        }
     }
 }

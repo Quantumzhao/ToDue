@@ -28,6 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
@@ -39,6 +41,8 @@
 			this.label9 = new System.Windows.Forms.Label();
 			this.button1 = new System.Windows.Forms.Button();
 			this.label10 = new System.Windows.Forms.Label();
+			this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+			this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.SuspendLayout();
 			// 
 			// label1
@@ -146,7 +150,7 @@
 			this.label9.BackColor = System.Drawing.Color.Transparent;
 			this.label9.Font = new System.Drawing.Font("Source Han Sans SC", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label9.ForeColor = System.Drawing.Color.White;
-			this.label9.Location = new System.Drawing.Point(353, 130);
+			this.label9.Location = new System.Drawing.Point(375, 130);
 			this.label9.Name = "label9";
 			this.label9.Size = new System.Drawing.Size(67, 35);
 			this.label9.TabIndex = 8;
@@ -163,9 +167,9 @@
 			this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.button1.Font = new System.Drawing.Font("Source Han Sans SC ExtraLight", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.button1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(200)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
-			this.button1.Location = new System.Drawing.Point(32, 330);
+			this.button1.Location = new System.Drawing.Point(10, 333);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(388, 44);
+			this.button1.Size = new System.Drawing.Size(400, 44);
 			this.button1.TabIndex = 9;
 			this.button1.Text = "Add";
 			this.button1.UseVisualStyleBackColor = false;
@@ -186,12 +190,25 @@
 			this.label10.Text = "MATH241";
 			this.label10.Visible = false;
 			// 
+			// notifyIcon1
+			// 
+			this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
+			this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+			this.notifyIcon1.Text = "notifyIcon1";
+			this.notifyIcon1.Visible = true;
+			// 
+			// contextMenuStrip1
+			// 
+			this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+			this.contextMenuStrip1.Name = "contextMenuStrip1";
+			this.contextMenuStrip1.Size = new System.Drawing.Size(241, 37);
+			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(255)))));
-			this.ClientSize = new System.Drawing.Size(418, 633);
+			this.ClientSize = new System.Drawing.Size(440, 633);
 			this.Controls.Add(this.label10);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.label9);
@@ -205,8 +222,14 @@
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
 			this.Name = "Form1";
-			this.Text = "Form1";
+			this.ShowInTaskbar = false;
+			this.Text = "Todue";
 			this.TransparencyKey = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(255)))));
+			this.Deactivate += new System.EventHandler(this.Form1_Deactivate);
+			this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
+			this.Load += new System.EventHandler(this.Form1_Load);
+			this.SizeChanged += new System.EventHandler(this.Form1_SizeChanged);
+			this.VisibleChanged += new System.EventHandler(this.Form1_VisibleChanged);
 			this.Paint += new System.Windows.Forms.PaintEventHandler(this.Form1_Paint);
 			this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseDown);
 			this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Form1_MouseMove);
@@ -229,6 +252,8 @@
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.Label label10;
+		private System.Windows.Forms.NotifyIcon notifyIcon1;
+		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
 	}
 }
 

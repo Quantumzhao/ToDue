@@ -9,23 +9,45 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using ToDue.Properties;
 using System.Reflection;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Drawing.Text;
+using System.Runtime.InteropServices;
 
 namespace ToDue
 {
 	public partial class Form1 : Form
 	{
-		private bool _IsMouseDown;
-		private Point _LastLocation;
-
 		public Form1()
 		{
 			InitializeComponent();
 
-			_ListView = new ListViewWrapper(this, _ItemsCollectionAnchor, 52);
+			this.Icon = Resources.icon__256x256_;
+
+			InitContextMenu();
+			InitFonts();
+
+			ListView = new ListViewWrapper(this, _ItemsCollectionAnchor, 52);
+
+			label1.Font = new Font(Fonts.Families[0], 50);
+			label2.Font = new Font(Fonts.Families[0], 40);
+			label3.Font = new Font(Fonts.Families[0], 40);
+			label4.Font = new Font(Fonts.Families[0], 40);
+			label5.Font = new Font(Fonts.Families[0], 40);
+			label6.Font = new Font(Fonts.Families[0], 40);
 		}
 
+		private bool _IsMouseDown;
+		private Point _LastLocation;
 		private readonly Point _ItemsCollectionAnchor = new Point(6, 141);
-		private readonly ListViewWrapper _ListView;
+		public readonly ListViewWrapper ListView;
+		private Point _SeparaterAnchor;
+		private Point _SeparaterEnd;
+		private Pen _Pen = new Pen(MyColors.DefaultColor, 0.5f);
+		private bool _IsLayoutChangedFlag = false;
+
+		//Create your private font collection object.
+		public readonly PrivateFontCollection Fonts = new PrivateFontCollection();
 
 		#region Add Button
 		private void button1_MouseEnter(object sender, EventArgs e)
@@ -41,19 +63,20 @@ namespace ToDue
 		}
 		private void button1_Click(object sender, EventArgs e)
 		{
-			_ListView.Add("Test", new DateTime());
+			Form2 form = new Form2(this);
+			form.ShowDialog(this);
 		}
 		#endregion
 
 		private void Form1_Paint(object sender, PaintEventArgs e)
 		{
-			//var graphics = e.Graphics;
-			//var pen = new Pen(MyColors.DefaultColor, 0.5f);
-			//graphics.DrawLine(pen, new Point(0, 0), new Point(50, 50));
-
-			//TextFormatFlags flags = TextFormatFlags.Bottom | TextFormatFlags.EndEllipsis;
-			//TextRenderer.DrawText(e.Graphics, "This is some text that will be clipped at the end.", this.Font,
-			//	new Rectangle(10, 10, 100, 50), SystemColors.ControlText, flags);
+			if (_IsLayoutChangedFlag)
+			{
+				Refresh();
+				_Pen.Color = MyColors.DefaultColor;
+				e.Graphics.DrawLine(_Pen, _SeparaterAnchor, _SeparaterEnd);
+				_IsLayoutChangedFlag = false;
+			}
 		}
 
 		private void Form1_MouseDown(object sender, MouseEventArgs e)
@@ -76,15 +99,153 @@ namespace ToDue
 		private void Form1_MouseUp(object sender, MouseEventArgs e)
 		{
 			_IsMouseDown = false;
+			Settings.Default.StartupLocation = Location;
+			Settings.Default.Save();
+		}
+
+		private void Form1_Load(object sender, EventArgs e)
+		{
+			var settings = Settings.Default;
+			try
+			{
+				this.Location = settings.StartupLocation;
+			}
+			catch
+			{
+				settings.Reset();
+				settings.Save();
+			}
+
+			Location = settings.StartupLocation;
+			Opacity = settings.Opacity;
+
+			using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.TodoItems)))
+			{
+				BinaryFormatter bf = new BinaryFormatter();
+				ListView.Items = bf.Deserialize(ms) as List<TodoItem>;
+			}
+
+			RedrawAll();
+		}
+
+		private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			_Pen.Dispose();
+		}
+
+		private void Form1_VisibleChanged(object sender, EventArgs e)
+		{
+			if (this.WindowState == FormWindowState.Minimized) this.WindowState = FormWindowState.Normal;
+		}
+
+		private void Form1_Deactivate(object sender, EventArgs e)
+		{
+			this.Activate();
+		}
+
+		private void Form1_SizeChanged(object sender, EventArgs e)
+		{
+			if (this.WindowState == FormWindowState.Minimized) this.WindowState = FormWindowState.Normal;
+		}
+
+		private void InitContextMenu()
+		{
+			var transparency = new ToolStripMenuItem("Transparency");
+			for (int i = 1; i <= 10; i++)
+			{
+				var text = $"{i}0%";
+				var percentage = i / 10f;
+				var menuItem = new ToolStripMenuItem(text);
+				menuItem.Click += (s, e) =>
+				{
+					this.Opacity = percentage;
+					Settings.Default.Opacity = percentage;
+					Settings.Default.Save();
+				};
+				transparency.DropDownItems.Add(menuItem);
+			}
+			contextMenuStrip1.Items.Add(transparency);
+
+			var theme = new ToolStripComboBox("Theme");
+			theme.Items.Add("Light");
+			theme.Items.Add("Dark");
+			theme.SelectedIndex = Settings.Default.IsLightMode ? 0 : 1;
+			theme.SelectedIndexChanged += (s, e) =>
+			{
+				MyColors.SetTheme((s as ToolStripComboBox).SelectedIndex == 0);
+				RedrawAll();
+			};
+			contextMenuStrip1.Items.Add(theme);
+
+			var sep = new ToolStripSeparator();
+			contextMenuStrip1.Items.Add(sep);
+
+			var exit = new ToolStripMenuItem("Exit");
+			exit.Click += (s, e) => Application.Exit();
+			contextMenuStrip1.Items.Add(exit);
+		}
+
+		private void InitFonts()
+		{
+			//Select your font from the resources.
+			//My font here is "Digireu.ttf"
+			int fontLength = Resources.ConservativeSimplicity.Length;
+
+			// create a buffer to read in to
+			byte[] fontdata = Resources.ConservativeSimplicity;
+
+			// create an unsafe memory block for the font data
+			IntPtr data = Marshal.AllocCoTaskMem(fontLength);
+
+			// copy the bytes to the unsafe memory block
+			Marshal.Copy(fontdata, 0, data, fontLength);
+
+			// pass the font to the font collection
+			Fonts.AddMemoryFont(data, fontLength);
+
+			int fontLength2 = Resources.segmdl2.Length;
+			byte[] fontdata2 = Resources.segmdl2;
+			IntPtr data2 = Marshal.AllocCoTaskMem(fontLength2);
+			Marshal.Copy(fontdata2, 0, data2, fontLength2);
+			Fonts.AddMemoryFont(data2, fontLength2);
+		}
+
+		public void RedrawAll()
+		{
+			_SeparaterAnchor = ListView.RedrawItems() + new Size(15, 0);
+			_SeparaterEnd = new Point(415, _SeparaterAnchor.Y);
+			_IsLayoutChangedFlag = true;
+
+			label1.ForeColor = MyColors.DefaultColor;
+			label2.ForeColor = MyColors.DefaultColor;
+			label3.ForeColor = MyColors.DefaultColor;
+			label4.ForeColor = MyColors.DefaultColor;
+			label5.ForeColor = MyColors.DefaultColor;
+			label6.ForeColor = MyColors.DefaultColor;
+			button1.ForeColor = MyColors.DefaultColor;
+			this.BackColor = MyColors.BackColor;
+			this.TransparencyKey = MyColors.BackColor;
+
+			button1.Location = _SeparaterAnchor + new Size(0, 13);
+		}
+
+		public void SaveTodoList()
+		{
+			using (MemoryStream ms = new MemoryStream())
+			{
+				BinaryFormatter bf = new BinaryFormatter();
+				bf.Serialize(ms, ListView.Items);
+				ms.Position = 0;
+				byte[] buffer = new byte[(int)ms.Length];
+				ms.Read(buffer, 0, buffer.Length);
+				Settings.Default.TodoItems = Convert.ToBase64String(buffer);
+				Settings.Default.Save();
+			}
 		}
 	}
 
-	class DateTimeComparer : IComparer<DateTime>
-	{
-		public int Compare(DateTime x, DateTime y) => DateTime.Compare(x, y);
-	}
-
-	class TodoItem
+	[Serializable]
+	public class TodoItem
 	{
 		public TodoItem(DateTime dueDate, string content)
 		{
@@ -102,18 +263,37 @@ namespace ToDue
 			return $"{DueDate.Month:00}{DueDate.Day:00}";
 		}
 
-		private static int _Count = 0;
-		private static string GenerateID() => _Count++.ToString();
+		private static string GenerateID() => Settings.Default.Counter++.ToString();
 	}
 
 	static class MyColors
 	{
-		internal static readonly Color DefaultColor = Color.FromArgb(200, 255, 255, 255);
-		internal static readonly Color AddBtnHighlightColor = Color.FromArgb(255, 179, 255, 213);
-		internal static readonly Color DefaultHighlightColor = Color.FromArgb(255, 255, 255, 255);
+		internal static Color DefaultColor => Settings.Default.IsLightMode ? _DefaultColorLight : _DefaultColorDark;
+		internal static Color AddBtnHighlightColor => Settings.Default.IsLightMode ? _AddBtnHighlightColorLight : _AddBtnHighlightColorDark;
+		internal static Color DefaultHighlightColor => Settings.Default.IsLightMode ? _DefaultHighlightColorLight : _DefaultHighlightColorDark;
+		internal static Color BackColor => Settings.Default.IsLightMode ? _BackColorLight : _BackColorDark;
+
+		private static readonly Color _DefaultColorDark = Color.FromArgb(200, 255, 255, 255);
+		private static readonly Color _AddBtnHighlightColorDark = Color.FromArgb(255, 179, 255, 213);
+		private static readonly Color _DefaultHighlightColorDark = Color.FromArgb(255, 255, 255, 255);
+		private static readonly Color _BackColorDark = Color.FromArgb(255, 240, 240, 255);
+
+		private static readonly Color _DefaultColorLight = Color.FromArgb(200, 0, 0, 0);
+		private static readonly Color _AddBtnHighlightColorLight = Color.FromArgb(255, 60, 84, 70);
+		private static readonly Color _DefaultHighlightColorLight = Color.FromArgb(255, 0, 0, 0);
+		private static readonly Color _BackColorLight = Color.FromArgb(255, 0, 0, 16);
+
+		internal static void SetTheme(bool isLight)
+		{
+			if (Settings.Default.IsLightMode != isLight)
+			{
+				Settings.Default.IsLightMode = isLight;
+				Settings.Default.Save();
+			}
+		}
 	}
 
-	class ListViewWrapper
+	public class ListViewWrapper
 	{
 		public ListViewWrapper(Form1 form, Point anchor, int itemOffsetY)
 		{
@@ -126,21 +306,19 @@ namespace ToDue
 		private Point _Anchor;
 		private int _ItemOffsetY;
 		private HashSet<Control> _Controls = new HashSet<Control>();
-		private readonly List<TodoItem> _Items = new List<TodoItem>();
+		public List<TodoItem> Items = new List<TodoItem>();
 
 		public void Add(string content, DateTime dueDate)
 		{
 			int pos = 0;
-			for (; pos < _Items.Count; pos++)
+			for (; pos < Items.Count; pos++)
 			{
-				if (dueDate <= _Items[pos].DueDate) break;
+				if (dueDate <= Items[pos].DueDate) break;
 			}
-			_Items.Insert(pos, new TodoItem(dueDate, content));
-
-			RedrawItems();
+			Items.Insert(pos, new TodoItem(dueDate, content));
 		}
 
-		public void RedrawItems()
+		public Point RedrawItems()
 		{
 			void DrawItem(TodoItem item, int anchorX, int anchorY)
 			{
@@ -151,7 +329,7 @@ namespace ToDue
 				var removeLbl = new Label()
 				{
 					ForeColor = MyColors.DefaultColor,
-					BackColor = Color.FromArgb(1, 255, 255, 255),
+					BackColor = Color.Transparent,
 					FlatStyle = FlatStyle.Flat,
 					Text = "",
 					Height = 20,
@@ -159,7 +337,7 @@ namespace ToDue
 					Tag = item.ID,
 					Location = baseAnchor
 				};
-				removeLbl.Font = new Font("Segoe MDL2 Assets", 8);
+				removeLbl.Font = new Font(_Me.Fonts.Families[1], 8);
 				removeLbl.MouseEnter += (s, e) =>
 				{
 					(s as Label).Text = "";
@@ -170,16 +348,10 @@ namespace ToDue
 				};
 				removeLbl.MouseClick += (s, e) =>
 				{
-					object tag = (s as Label).Tag;
-					//var rmList = _Controls.Where(c => c.Tag == tag).ToArray();
-					//foreach (var con in rmList)
-					//{
-					//	_Controls.Remove(con);
-					//	_Me.Controls.Remove(con);
-					//}
-					var rm = _Items.Single(i => i.ID == tag as string);
-					_Items.Remove(rm);
-					RedrawItems();
+					var rm = Items.Single(i => i.ID == (s as Label).Tag as string);
+					Items.Remove(rm);
+					_Me.SaveTodoList();
+					_Me.RedrawAll();
 				};
 				_Me.Controls.Add(removeLbl);
 				_Controls.Add(removeLbl);
@@ -220,11 +392,13 @@ namespace ToDue
 			_Controls.Clear();
 
 			int currentY = _Anchor.Y;
-			foreach (var item in _Items)
+			foreach (var item in Items)
 			{
 				DrawItem(item, _Anchor.X, currentY);
-				currentY += 50;
+				currentY += _ItemOffsetY;
 			}
+
+			return new Point(_Anchor.X, currentY);
 		}
 	}
 }
