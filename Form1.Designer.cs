@@ -125,9 +125,9 @@
 			this.label7.ForeColor = System.Drawing.Color.White;
 			this.label7.Location = new System.Drawing.Point(26, 130);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(116, 35);
+			this.label7.Size = new System.Drawing.Size(305, 35);
 			this.label7.TabIndex = 6;
-			this.label7.Text = "CMSC430";
+			this.label7.Text = "CMSC430 abvlibuivfhnmjml";
 			this.label7.Visible = false;
 			// 
 			// label8
@@ -201,7 +201,7 @@
 			// 
 			this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.contextMenuStrip1.Name = "contextMenuStrip1";
-			this.contextMenuStrip1.Size = new System.Drawing.Size(241, 37);
+			this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
 			// 
 			// Form1
 			// 

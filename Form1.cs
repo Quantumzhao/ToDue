@@ -364,6 +364,7 @@ namespace ToDue
 					FlatStyle = FlatStyle.Flat,
 					Height = 35,
 					Tag = item.ID,
+					AutoSize = true,
 					Location = contentAnchor
 				};
 				content.Font = new Font("Source Han Sans SC ExtraLight", 12);
