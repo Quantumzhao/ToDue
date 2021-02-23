@@ -242,6 +242,18 @@ namespace ToDue
 				Settings.Default.Save();
 			}
 		}
+
+		private void label6_Click(object sender, EventArgs e)
+		{
+			if (this.FormBorderStyle == FormBorderStyle.None)
+			{
+				this.FormBorderStyle = FormBorderStyle.Sizable;
+			}
+			else if (this.FormBorderStyle == FormBorderStyle.Sizable)
+			{
+				this.FormBorderStyle = FormBorderStyle.None;
+			}
+		}
 	}
 
 	[Serializable]

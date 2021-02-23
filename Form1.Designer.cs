@@ -116,6 +116,7 @@
 			this.label6.Size = new System.Drawing.Size(94, 89);
 			this.label6.TabIndex = 5;
 			this.label6.Text = "S";
+			this.label6.Click += new System.EventHandler(this.label6_Click);
 			// 
 			// label7
 			// 
@@ -221,6 +222,7 @@
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+			this.MinimumSize = new System.Drawing.Size(440, 0);
 			this.Name = "Form1";
 			this.ShowInTaskbar = false;
 			this.Text = "Todue";
