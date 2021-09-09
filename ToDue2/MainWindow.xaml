@@ -1,0 +1,16 @@
+﻿<Window x:Class="ToDue2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ToDue2"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+		Height="633" 
+		Width="440"
+		Background="Transparent"
+		StateChanged="Window_StateChanged" WindowStyle="None" AllowsTransparency="True">
+    <Grid>
+		<TextBlock Text="Hello" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	</Grid>
+</Window>
