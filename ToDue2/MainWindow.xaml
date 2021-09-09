@@ -5,12 +5,63 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ToDue2"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="" 
 		Height="633" 
 		Width="440"
 		Background="Transparent"
 		StateChanged="Window_StateChanged" WindowStyle="None" AllowsTransparency="True">
-    <Grid>
-		<TextBlock Text="Hello" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="152"/>
+			<RowDefinition/>
+			<RowDefinition Height="58"/>
+		</Grid.RowDefinitions>
+		<Image Source="/design.jpg" Stretch="Uniform" StretchDirection="UpOnly" Height="633" VerticalAlignment="Top" Visibility="Visible" Grid.RowSpan="3"/>
+		<TextBlock Text="T" 
+				   Foreground="White" 
+				   HorizontalAlignment="Left" 
+				   VerticalAlignment="Top" 
+				   Margin="36,52,0,0" 
+				   FontFamily="./Resources/#Conservative Simplicity" FontSize="90" Grid.RowSpan="2" Height="103" Width="64"/>
+		<TextBlock Text="H" 
+				   Foreground="White" 
+				   HorizontalAlignment="Left" 
+				   VerticalAlignment="Top" 
+				   Margin="99,70,0,0" 
+				   FontFamily="./Resources/#Conservative Simplicity" FontSize="70" Height="80" Width="57"/>
+		<TextBlock Text="I" 
+				   Foreground="White" 
+				   HorizontalAlignment="Left" 
+				   VerticalAlignment="Top" 
+				   Margin="170,70,0,0" 
+				   FontFamily="./Resources/#Conservative Simplicity" FontSize="70" Height="80" Width="21"/>
+		<TextBlock Text="N" 
+				   Foreground="White" 
+				   HorizontalAlignment="Left" 
+				   VerticalAlignment="Top" 
+				   Margin="205,70,0,0" 
+				   FontFamily="./Resources/#Conservative Simplicity" FontSize="70" Height="80" Width="59"/>
+		<TextBlock Text="G" 
+				   Foreground="White" 
+				   HorizontalAlignment="Left" 
+				   VerticalAlignment="Top" 
+				   Margin="280,70,0,0" 
+				   FontFamily="./Resources/#Conservative Simplicity" FontSize="70" Height="80" Width="55"/>
+		<TextBlock Text="S" 
+				   Foreground="White" 
+				   HorizontalAlignment="Left" 
+				   VerticalAlignment="Top" 
+				   Margin="349,70,0,0" 
+				   FontFamily="./Resources/#Conservative Simplicity" FontSize="70" Height="80" Width="49"/>
+		<ScrollViewer VerticalScrollBarVisibility="Hidden" Grid.Row="1">
+			<StackPanel>
+
+			</StackPanel>
+		</ScrollViewer>
+		<Grid Grid.Row="2">
+			<Line Y2="50" X2="50"/>
+			<Button BorderBrush="{x:Null}" Background="Transparent" Margin="0,0,0,0"/>
+		</Grid>
+
 	</Grid>
 </Window>

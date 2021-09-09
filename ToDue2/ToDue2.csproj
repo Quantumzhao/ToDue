@@ -7,11 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="design.jpg" />
     <None Remove="icon [256x256].ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="icon [256x256].ico" />
+    <Content Include="Resources\icon [256x256].ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="design.jpg" />
+		<Resource Include="Resources\FontDesign.ConservativeSimplicity.Neo.Levis.Completus_0.ttf"/>
   </ItemGroup>
 
 </Project>
