@@ -5,10 +5,11 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="clr-namespace:ToDue2"
+	xmlns:tb="http://www.hardcodet.net/taskbar"
 	mc:Ignorable="d"
 	Title="ToDue 2" 
 	Height="633" 
-	Width="440"
+	Width="420"
 	Background="Transparent"
 	StateChanged="Window_StateChanged" 
 	Loaded="Window_Loaded"
@@ -21,7 +22,9 @@
 		<Style x:Key="Title" TargetType="TextBlock">
 			<Style.Setters>
 				<Setter Property="FontFamily" Value="./Resources/#Conservative Simplicity"/>
-				<Setter Property="Foreground" Value="White"/>
+				<Setter 
+					Property="Foreground" 
+					Value="{StaticResource LightForeground}"/>
 				<Setter Property="HorizontalAlignment" Value="Left"/>
 				<Setter Property="VerticalAlignment" Value="Top"/>
 				<Setter Property="FontSize" Value="70"/>
@@ -30,29 +33,50 @@
 		<Style x:Key="Body" TargetType="TextBlock">
 			<Style.Setters>
 				<Setter Property="FontFamily" Value="Segoe UI Light"/>
-				<Setter Property="Foreground" Value="White"/>
+				<Setter 
+					Property="Foreground" 
+					Value="{StaticResource LightForeground}"/>
 				<Setter Property="FontSize" Value="20"/>
 			</Style.Setters>
 		</Style>
 	</Window.Resources>
-	<Grid>
+	<Grid RenderTransformOrigin="0.5,0.5">
+		<Grid.RenderTransform>
+			<TransformGroup>
+				<ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
+				<SkewTransform/>
+				<RotateTransform/>
+				<TranslateTransform/>
+			</TransformGroup>
+		</Grid.RenderTransform>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="152"/>
 			<RowDefinition/>
 			<RowDefinition Height="58"/>
 		</Grid.RowDefinitions>
-		<Image 
-			Source="/design.jpg" 
-			Stretch="Uniform" 
-			StretchDirection="UpOnly" 
-			Height="633" 
-			VerticalAlignment="Top" 
-			Visibility="Hidden"
-			Grid.RowSpan="3"/>
+		<tb:TaskbarIcon
+			IconSource="/Resources/icon [256x256].ico"
+			ToolTipText="ToDue2">
+			<tb:TaskbarIcon.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Opacity">
+						<MenuItem Header="25%" Click="Transparency_Click" Tag="0.25"/>
+						<MenuItem Header="50%" Click="Transparency_Click" Tag="0.5"/>
+						<MenuItem Header="75%" Click="Transparency_Click" Tag="0.75"/>
+						<MenuItem Header="100%" Click="Transparency_Click" Tag="1"/>
+					</MenuItem>
+					<MenuItem Header="Dark" IsCheckable="True" Checked="Theme_Checked" Unchecked="Theme_UnChecked"/>
+					<Separator/>
+					<MenuItem Header="Reset position" Click="Reset_Click"/>
+					<Separator/>
+					<MenuItem Header="Exit" Click="Exit_Click" />
+				</ContextMenu>
+			</tb:TaskbarIcon.ContextMenu>
+		</tb:TaskbarIcon>
 		<TextBlock 
 			Style="{StaticResource Title}"
 			Text="T" 
-			Margin="36,52,0,0" 
+			Margin="26,54,0,0" 
 			FontSize="90" 
 			Grid.RowSpan="2" 
 			Height="103" 
@@ -60,131 +84,89 @@
 		<TextBlock
 			Style="{StaticResource Title}"
 			Text="H" 
-			Margin="99,70,0,0" 
+			Margin="89,72,0,0" 
 			Height="80" 
 			Width="57"/>
 		<TextBlock 
 			Style="{StaticResource Title}"
 			Text="I" 
-			Margin="170,70,0,0" 
+			Margin="160,72,0,0" 
 			Height="80" 
 			Width="21"/>
 		<TextBlock 
 			Style="{StaticResource Title}"
 			Text="N" 
-			Margin="205,70,0,0" 
+			Margin="195,72,0,0" 
 			Height="80" 
 			Width="59"/>
 		<TextBlock 
 			Style="{StaticResource Title}"
 			Text="G" 
-			Margin="280,70,0,0" 
+			Margin="270,72,0,0" 
 			Height="80" 
 			Width="55"/>
 		<TextBlock 
 			Style="{StaticResource Title}"
 			Text="S" 
-			Margin="349,70,0,0" 
+			Margin="339,72,0,0" 
 			Height="80" 
 			Width="49"/>
 		<ScrollViewer 
-			VerticalScrollBarVisibility="Hidden" 
-			Grid.Row="1">
-			<!--<StackPanel>
-				<Grid 
-					Margin="30, 5, 48, 5" 
-					HorizontalAlignment="Stretch">
-					<Button 
-						Width="16" 
-						Height="16" 
-						HorizontalAlignment="Left" 
-						VerticalAlignment="Center" 
-						Background="Transparent" 
-						BorderBrush="Transparent">
-						<TextBlock 
-							FontFamily="./Resources/#Segoe MDL2 Assets" 
-							Text="" 
-							FontSize="10" 
-							Foreground="White"/>
-					</Button>
-					<TextBox 
-						Margin="24,0,0,0" 
-						Background="Transparent" 
-						BorderBrush="Transparent" 
-						BorderThickness="0, 0, 0, 1"
-						Text="CMSC434"
-						Foreground="White"
-						FontSize="20"
-						FontFamily="Segoe UI Light"
-						TextWrapping="Wrap"
-						MaxLines="2"/>
-					<DatePickerTextBox 
-						HorizontalAlignment="Right" 
-						FontSize="20" 
-						Foreground="White" 
-						Background="Transparent" 
-						BorderBrush="Transparent" 
-						BorderThickness="0, 0, 0, 1" 
-						FontFamily="Segoe UI Light" 
-						Text="{Binding ElementName=Window, Path=DateOfNow, Mode=OneTime}"
-						TextAlignment="Right" 
-						Width="53"/>
-				</Grid>
-			</StackPanel>-->
+			VerticalScrollBarVisibility="Auto" 
+			Grid.Row="1"
+			Background="{StaticResource TransparentBackground}">
 			<ItemsControl ItemsSource="{Binding ElementName=Window, Path=TodoItems}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Grid 
-							Margin="30, 5, 48, 5" 
-							HorizontalAlignment="Stretch">
-							<Button 
+							Margin="30, 5, 30, 5" 
+							HorizontalAlignment="Stretch"
+							Background="{x:Null}">
+							<Button
 								Width="16" 
 								Height="16" 
 								HorizontalAlignment="Left" 
-								VerticalAlignment="Center" 
-								Background="Transparent" 
-								BorderBrush="Transparent"
-								Command="{Binding ElementName=Window, Path=RemoveItem}" CommandParameter="{Binding}">
+								VerticalAlignment="Top" 
+								Margin="0, 7, 0, 0"
+								Background="{StaticResource TransparentBackground}" 
+								BorderBrush="{x:Null}"
+								Click="RemoveItem">
 								<TextBlock 
 									FontFamily="./Resources/#Segoe MDL2 Assets" 
 									Text="&#xE106;" 
-									FontSize="10" 
-									Foreground="White"/>
+									FontSize="8" 
+									Foreground="{StaticResource LightForeground}"/>
 							</Button>
 							<TextBox 
-								Margin="24,0,0,0" 
-								Background="Transparent" 
-								BorderBrush="Transparent" 
+								Style="{StaticResource Item}"
+								Margin="24,0,74,0"
 								BorderThickness="0, 0, 0, 1"
-								Foreground="White"
+								Foreground="{StaticResource LightForeground}"
 								FontSize="20"
 								FontFamily="Segoe UI Light"
 								TextWrapping="Wrap"
 								MaxLines="2"
 								Text="{Binding Path=Content, Mode=TwoWay}"/>
-							<DatePickerTextBox 
-								HorizontalAlignment="Right" 
-								FontSize="20" 
-								Foreground="White" 
-								Background="Transparent" 
-								BorderBrush="Transparent" 
-								BorderThickness="0, 0, 0, 1" 
-								FontFamily="Segoe UI Light"
-								Text="{Binding Path=DueDate, Mode=TwoWay}"
-								TextAlignment="Right" 
-								Width="53"/>
+							<local:MyDatePicker			
+								HorizontalAlignment="Right"
+								BorderThickness="0"
+								Width="60"/>
 						</Grid>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>
 			</ItemsControl>
 		</ScrollViewer>
 		<Grid Grid.Row="2">
-			<Line Y2="50" X2="50" Stroke="White"/>
-			<Button 
-				BorderBrush="{x:Null}" 
-				Background="Transparent"
-				Margin="0,0,0,0">
-			</Button>
+			<Line X1="30" X2="390" Stroke="White"/>
+			<Grid
+				Margin="30,10,30,10">
+				<Button 
+					BorderBrush="{x:Null}" 
+					Background="{StaticResource TransparentBackground}" 
+					Click="AddButton_Click">
+					<TextBlock Style="{StaticResource Body}" Text="Add"/>
+				</Button>
+			</Grid>
 		</Grid>
 	</Grid>
 </Window>

@@ -42,19 +42,38 @@ Originally I planned to implement it as a *Rainmeter* widget, but failed for all
 - [x] Title
 - [x] Todo item data structure
 - [x] List view of items
+    - [x] Layout
+        - [x] Adaptive
+        - [x] Meet design style
+    - [ ] Data binding
+        - [ ] *Remove* button
+        - [ ] Item name
+        - [ ] Data
+    - [ ] Style
+        - [ ] Animation
+            - [ ] *Remove* button
+            - [ ] Item name
+            - [ ] Data
+        - [ ] Visual Style
+            - [ ] *Remove* button
+            - [ ] Item name
+            - [ ] Data
 - [ ] Add button
+    - [ ] Application logic
+        - [ ] Building domain model from inputs
+        - [ ] Adding & Sorting
+    - [ ] Style
+        - [ ] Visual Style
+    - [ ] Animation
+    - [ ] Layout
 - [ ] Separator
-- [ ] Input textboxes
-- [ ] Handling adding new items
-    - [ ] Building domain model from inputs
-    - [ ] Adding & Sorting
-- [ ] Handling removing items
 - [ ] Draggable interface
 - [x] Keep on desktop
 - [ ] Show in notification area
     - [ ] Setting transparency
     - [ ] Switching between light/dark mode
     - [ ] Exit
+    - [ ] Reset posit
 - [x] An icon
 - [x] Read from/write to file
 - [x] Embed fonts

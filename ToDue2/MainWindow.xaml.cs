@@ -40,7 +40,6 @@ namespace ToDue2
 		public MainWindow()
 		{
 			InitializeComponent();
-
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -66,10 +65,11 @@ namespace ToDue2
 
 		public void SaveTodoList()
 		{
+			var arr = TodoItems.Select(o => (TodoStruct)o).ToArray();
 			using (MemoryStream ms = new MemoryStream())
 			{
 				BinaryFormatter bf = new BinaryFormatter();
-				bf.Serialize(ms, TodoItems);
+				bf.Serialize(ms, arr);
 				ms.Position = 0;
 				byte[] buffer = new byte[(int)ms.Length];
 				ms.Read(buffer, 0, buffer.Length);
@@ -85,23 +85,67 @@ namespace ToDue2
 			//Location = settings.StartupLocation;
 			//Opacity = settings.Opacity;
 
+#if true
 			if (settings.TodoItems == string.Empty)
 			{
 				TodoItems = new ObservableCollection<TodoItem>();
 				TodoItems.Add(new TodoItem(DateTime.Now, "Test"));
-				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
 			}
 			else using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.TodoItems)))
 			{
 				BinaryFormatter bf = new BinaryFormatter();
-				TodoItems = bf.Deserialize(ms) as ObservableCollection<TodoItem>;
+				TodoItems = new ObservableCollection<TodoItem>((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
 			}
+#else
+			TodoItems = new ObservableCollection<TodoItem>();
+			TodoItems.Add(new TodoItem(DateTime.Now, "Test"));
+#endif
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
 		}
 
-		public void RemoveItem(TodoItem item)
+		#region MenuItem Actions
+		private void Exit_Click(object sender, RoutedEventArgs e)
 		{
-			TodoItems.Remove(item);
+			this.Close();
+		}
+
+		private void Transparency_Click(object sender, RoutedEventArgs e)
+		{
+			this.Opacity = double.Parse((sender as Control).Tag as string);
+			Settings.Default.Opacity = this.Opacity;
+			Settings.Default.Save();
+		}
+
+		private void Theme_Checked(object sender, RoutedEventArgs e)
+		{
+			
+		}
+
+		private void Theme_UnChecked(object sender, RoutedEventArgs e)
+		{
+
+		}
+		#endregion
+
+
+		public void RemoveItem(object sender, RoutedEventArgs e)
+		{
+			TodoItems.Remove((sender as Control).DataContext as TodoItem);
 			SaveTodoList();
+		}
+
+		private void AddButton_Click(object sender, RoutedEventArgs e)
+		{
+			TodoItems.Add(new TodoItem(DateTime.Now, "Test"));
+			SaveTodoList();
+		}
+
+		private void Reset_Click(object sender, RoutedEventArgs e)
+		{
+			this.Top = 0;
+			this.Left = 0;
+			Settings.Default.StartupLocation = new System.Drawing.Point(0, 0);
+			Settings.Default.Save();
 		}
 	}
 }

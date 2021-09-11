@@ -1,9 +1,123 @@
 ﻿<Application x:Class="ToDue2.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:ToDue2"
+			 xmlns:converters="clr-namespace:ToDue2.Converters"
              StartupUri="MainWindow.xaml">
-    <Application.Resources>
-         
-    </Application.Resources>
+	<Application.Resources>
+		<SolidColorBrush x:Key="Alert" Color="#FFFFAEBB"/>
+		<SolidColorBrush x:Key="Warning" Color="#FFECF38D"/>
+		<SolidColorBrush x:Key="OK" Color="#FF83E8A7"/>
+		<SolidColorBrush x:Key="LightForeground" Color="White"/>
+		<SolidColorBrush x:Key="DarkForeGround" Color="Black"/>
+		<SolidColorBrush x:Key="TransparentBackground" Color="#02000000"/>
+		<SolidColorBrush x:Key="HighlightBackground" Color="#33FFFFFF"/>
+		<SolidColorBrush x:Key="PressedBackGround" Color="#7FFFFFFF"/>
+		<converters:DateConverter x:Key="DateConverter"/>
+		<converters:ColorConverter x:Key="ColorConverter"/>
+		<Style TargetType="Button">
+			<Style.Setters>
+				<Setter 
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="Button">
+							<Border 
+								Background="{StaticResource TransparentBackground}"
+								BorderBrush="{x:Null}">
+								<ContentPresenter 
+									HorizontalAlignment="Center" 
+									VerticalAlignment="Center">
+								</ContentPresenter>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border 
+										Background="{StaticResource HighlightBackground}"
+										BorderBrush="{x:Null}">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsPressed" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border 
+										Background="{StaticResource PressedBackGround}"
+										BorderBrush="{x:Null}">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style x:Key="Item" TargetType="TextBox">
+			<Style.Setters>
+				<Setter 
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style TargetType="{x:Type DatePickerTextBox}">
+			<Setter Property="Control.Template">
+				<Setter.Value>
+					<ControlTemplate>
+						<TextBox 
+							x:Name="PART_TextBox" 
+                            Text="{Binding Path=DueDate, Converter={StaticResource DateConverter}}" 
+							FontSize="20"
+							FontFamily="Segoe UI Semibold"
+							Foreground="{Binding Path=DueDate, Converter={StaticResource ColorConverter}}"
+							Background="{StaticResource TransparentBackground}"
+							HorizontalAlignment="Right"
+							VerticalAlignment="Stretch"
+							TextAlignment="Right"
+							BorderThickness="0"/>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+		<Style TargetType="local:MyDatePicker">
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+	</Application.Resources>
 </Application>
