@@ -12,7 +12,7 @@ namespace ToDue2.Converters
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var diff = (DateTime)value - DateTime.Now;
+			var diff = (DateTime)(value ?? DateTime.Now) - DateTime.Now;
 			if (diff >= TimeSpan.FromDays(7))
 			{
 				return Application.Current.Resources["OK"];

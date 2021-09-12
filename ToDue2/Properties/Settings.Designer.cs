@@ -94,5 +94,41 @@ namespace ToDue2.Properties {
                 this["PinnedItems"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoStart {
+            get {
+                return ((bool)(this["AutoStart"]));
+            }
+            set {
+                this["AutoStart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowInTaskBar {
+            get {
+                return ((bool)(this["ShowInTaskBar"]));
+            }
+            set {
+                this["ShowInTaskBar"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool HideFromTaskManager {
+            get {
+                return ((bool)(this["HideFromTaskManager"]));
+            }
+            set {
+                this["HideFromTaskManager"] = value;
+            }
+        }
     }
 }

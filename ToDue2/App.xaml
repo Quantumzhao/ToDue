@@ -7,7 +7,9 @@
              StartupUri="MainWindow.xaml">
 	<Application.Resources>
 		<SolidColorBrush x:Key="Alert" Color="#FFFFAEBB"/>
+		<SolidColorBrush x:Key="RedAlert" Color="#FFFF798E"/>
 		<SolidColorBrush x:Key="Warning" Color="#FFECF38D"/>
 		<SolidColorBrush x:Key="OK" Color="#FF83E8A7"/>
+		<SolidColorBrush x:Key="LightForeground" Color="White"/>
 	</Application.Resources>
 </Application>

@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using System.Windows.Data;
+using System.Windows.Controls;
+using System.Windows;
 
 namespace ToDue2.Converters
 {
-	public class DateConverter : IValueConverter
+	class PriorityToColorConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var date = (DateTime)(value ?? DateTime.Now);
-			return $"{date.Month:00}/{date.Day:00}";
+			if ((bool)(value ?? false))
+			{
+				return Application.Current.Resources["Alert"];
+			}
+			else
+			{
+				return Application.Current.Resources["LightForeground"];
+			}
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

@@ -4,15 +4,27 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+    <Win32Resource />
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="design.jpg" />
     <None Remove="icon [256x256].ico" />
+    <None Remove="icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\icon [256x256].ico" />
+    <Resource Include="icon.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="icon [256x256].ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\icon [256x256].ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
