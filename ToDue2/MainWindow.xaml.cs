@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using ToDue2.Properties;
 
 namespace ToDue2
@@ -26,20 +27,28 @@ namespace ToDue2
 	/// </summary>
 	public partial class MainWindow : Window, INotifyPropertyChanged
 	{
-		public ObservableCollection<TodoItem> TodoItems { get; private set; }
+		public ObservableCollection<TodoItem> PinnedItems { get; private set; }
+		public ObservableSortedList TodoItems { get; private set; }
+		private DispatcherTimer _Timer;
 
-		public string DateOfNow
+		private DateTime _DisplayedDueDate = DateTime.Now;
+		public DateTime DisplayedDueDate
 		{
-			get
+			get => _DisplayedDueDate;
+			set
 			{
-				var now = DateTime.Now;
-				return $"{now.Month}/{now.Day}";
+				_DisplayedDueDate = value;
+				PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayedDueDate)));
 			}
 		}
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			_Timer = new DispatcherTimer(DispatcherPriority.Background);
+			_Timer.Interval = TimeSpan.FromDays(1);
+			_Timer.Tick += (s, e) => Refresh();
+			_Timer.Start();
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -88,13 +97,13 @@ namespace ToDue2
 #if true
 			if (settings.TodoItems == string.Empty)
 			{
-				TodoItems = new ObservableCollection<TodoItem>();
+				TodoItems = new ObservableSortedList();
 				TodoItems.Add(new TodoItem(DateTime.Now, "Test"));
 			}
 			else using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.TodoItems)))
 			{
 				BinaryFormatter bf = new BinaryFormatter();
-				TodoItems = new ObservableCollection<TodoItem>((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
+				TodoItems = new ObservableSortedList((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
 			}
 #else
 			TodoItems = new ObservableCollection<TodoItem>();
@@ -116,6 +125,11 @@ namespace ToDue2
 			Settings.Default.Save();
 		}
 
+		private void Refresh_Click(object sender, RoutedEventArgs e)
+		{
+			Refresh();
+		}
+
 		private void Theme_Checked(object sender, RoutedEventArgs e)
 		{
 			
@@ -127,6 +141,8 @@ namespace ToDue2
 		}
 		#endregion
 
+		#region Add button and related stuff
+		#endregion
 
 		public void RemoveItem(object sender, RoutedEventArgs e)
 		{
@@ -134,11 +150,6 @@ namespace ToDue2
 			SaveTodoList();
 		}
 
-		private void AddButton_Click(object sender, RoutedEventArgs e)
-		{
-			TodoItems.Add(new TodoItem(DateTime.Now, "Test"));
-			SaveTodoList();
-		}
 
 		private void Reset_Click(object sender, RoutedEventArgs e)
 		{
@@ -146,6 +157,26 @@ namespace ToDue2
 			this.Left = 0;
 			Settings.Default.StartupLocation = new System.Drawing.Point(0, 0);
 			Settings.Default.Save();
+		}
+
+		private void InputBox_Enter(object sender, KeyEventArgs e)
+		{
+			if (e.Key != Key.Enter) return;
+
+			if (!(Toggle.IsChecked ?? false))
+			{
+				TodoItems.Add(new TodoItem(DueDate.SelectedDate ?? DateTime.Now, InputBox.Text));
+			}
+			else
+			{
+				PinnedItems.Add(new TodoItem(DateTime.MinValue, InputBox.Text));
+			}
+		}
+
+		private void Refresh()
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayedDueDate)));
 		}
 	}
 }

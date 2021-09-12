@@ -5,7 +5,9 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:local="clr-namespace:ToDue2"
+	xmlns:converters="clr-namespace:ToDue2.Converters"
 	xmlns:tb="http://www.hardcodet.net/taskbar"
+	xmlns:System="clr-namespace:System;assembly=mscorlib"
 	mc:Ignorable="d"
 	Title="ToDue 2" 
 	Height="633" 
@@ -19,6 +21,105 @@
 	Top="10"
 	Name="Window">
 	<Window.Resources>
+		<SolidColorBrush x:Key="LightForeground" Color="White"/>
+		<SolidColorBrush x:Key="DarkForeGround" Color="Black"/>
+		<SolidColorBrush x:Key="TransparentBackground" Color="#02000000"/>
+		<SolidColorBrush x:Key="HighlightBackground" Color="#33FFFFFF"/>
+		<SolidColorBrush x:Key="PressedBackGround" Color="#7FFFFFFF"/>
+		<SolidColorBrush x:Key="InfoHighlight" Color="#FF2C6FC2"/>
+		<converters:DateConverter x:Key="DateConverter"/>
+		<converters:ColorConverter x:Key="ColorConverter"/>
+		<converters:NegateConverter x:Key="NegateConverter"/>
+		<converters:VisibilityConverter x:Key="VisibilityConverter"/>
+		<Style TargetType="Button">
+			<Style.Setters>
+				<Setter 
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="Button">
+							<Border 
+								Background="{StaticResource TransparentBackground}"
+								BorderBrush="{x:Null}">
+								<ContentPresenter 
+									HorizontalAlignment="Center" 
+									VerticalAlignment="Center">
+								</ContentPresenter>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border 
+										Background="{StaticResource HighlightBackground}"
+										BorderBrush="{x:Null}">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsPressed" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border 
+										Background="{StaticResource PressedBackGround}"
+										BorderBrush="{x:Null}">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style x:Key="Item" TargetType="TextBox">
+			<Style.Setters>
+				<Setter 
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style TargetType="local:MyDatePicker">
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsEnabled" Value="False">
+					<Trigger.Setters>
+						<Setter Property="Button.Visibility" Value="Collapsed"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
 		<Style x:Key="Title" TargetType="TextBlock">
 			<Style.Setters>
 				<Setter Property="FontFamily" Value="./Resources/#Conservative Simplicity"/>
@@ -39,21 +140,85 @@
 				<Setter Property="FontSize" Value="20"/>
 			</Style.Setters>
 		</Style>
+		<Style TargetType="ToggleButton">
+			<Style.Setters>
+				<Setter 
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Opacity" Value="0.5"/>
+				<Setter Property="TextElement.Foreground" Value="{StaticResource LightForeground}"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="ToggleButton">
+							<Border 
+								Background="{StaticResource TransparentBackground}"
+								BorderBrush="{x:Null}"
+								CornerRadius="14">
+								<ContentPresenter 
+									HorizontalAlignment="Center" 
+									VerticalAlignment="Center">
+								</ContentPresenter>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{StaticResource HighlightBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{StaticResource InfoHighlight}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsChecked" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{StaticResource PressedBackGround}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{StaticResource InfoHighlight}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
 	</Window.Resources>
-	<Grid RenderTransformOrigin="0.5,0.5">
-		<Grid.RenderTransform>
+	<StackPanel RenderTransformOrigin="0.5,0.5">
+		<StackPanel.RenderTransform>
 			<TransformGroup>
 				<ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
 				<SkewTransform/>
 				<RotateTransform/>
 				<TranslateTransform/>
 			</TransformGroup>
-		</Grid.RenderTransform>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="152"/>
-			<RowDefinition/>
-			<RowDefinition Height="58"/>
-		</Grid.RowDefinitions>
+		</StackPanel.RenderTransform>
 		<tb:TaskbarIcon
 			IconSource="/Resources/icon [256x256].ico"
 			ToolTipText="ToDue2">
@@ -67,106 +232,269 @@
 					</MenuItem>
 					<MenuItem Header="Dark" IsCheckable="True" Checked="Theme_Checked" Unchecked="Theme_UnChecked"/>
 					<Separator/>
-					<MenuItem Header="Reset position" Click="Reset_Click"/>
+					<MenuItem Header="Other">
+						<MenuItem Header="Reset position" Click="Reset_Click"/>
+						<MenuItem Header="Refresh" Click="Refresh_Click"/>
+					</MenuItem>
 					<Separator/>
 					<MenuItem Header="Exit" Click="Exit_Click" />
 				</ContextMenu>
 			</tb:TaskbarIcon.ContextMenu>
 		</tb:TaskbarIcon>
-		<TextBlock 
-			Style="{StaticResource Title}"
-			Text="T" 
-			Margin="26,54,0,0" 
-			FontSize="90" 
-			Grid.RowSpan="2" 
-			Height="103" 
-			Width="64"/>
-		<TextBlock
-			Style="{StaticResource Title}"
-			Text="H" 
-			Margin="89,72,0,0" 
-			Height="80" 
-			Width="57"/>
-		<TextBlock 
-			Style="{StaticResource Title}"
-			Text="I" 
-			Margin="160,72,0,0" 
-			Height="80" 
-			Width="21"/>
-		<TextBlock 
-			Style="{StaticResource Title}"
-			Text="N" 
-			Margin="195,72,0,0" 
-			Height="80" 
-			Width="59"/>
-		<TextBlock 
-			Style="{StaticResource Title}"
-			Text="G" 
-			Margin="270,72,0,0" 
-			Height="80" 
-			Width="55"/>
-		<TextBlock 
-			Style="{StaticResource Title}"
-			Text="S" 
-			Margin="339,72,0,0" 
-			Height="80" 
-			Width="49"/>
+		<Grid Height="152">
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="T" 
+				Margin="26,54,0,0" 
+				FontSize="90" 
+				Grid.RowSpan="2" 
+				Height="103" 
+				Width="64"/>
+			<TextBlock
+				Style="{StaticResource Title}"
+				Text="H" 
+				Margin="89,72,0,0" 
+				Height="80" 
+				Width="57"/>
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="I" 
+				Margin="160,72,0,0" 
+				Height="80" 
+				Width="21"/>
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="N" 
+				Margin="195,72,0,0" 
+				Height="80" 
+				Width="59"/>
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="G" 
+				Margin="270,72,0,0" 
+				Height="80" 
+				Width="55"/>
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="S" 
+				Margin="339,72,0,0" 
+				Height="80" 
+				Width="49"/>
+			
+		</Grid>
 		<ScrollViewer 
 			VerticalScrollBarVisibility="Auto" 
-			Grid.Row="1"
-			Background="{StaticResource TransparentBackground}">
-			<ItemsControl ItemsSource="{Binding ElementName=Window, Path=TodoItems}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Grid 
-							Margin="30, 5, 30, 5" 
-							HorizontalAlignment="Stretch"
-							Background="{x:Null}">
-							<Button
-								Width="16" 
-								Height="16" 
-								HorizontalAlignment="Left" 
-								VerticalAlignment="Top" 
-								Margin="0, 7, 0, 0"
-								Background="{StaticResource TransparentBackground}" 
-								BorderBrush="{x:Null}"
-								Click="RemoveItem">
-								<TextBlock 
-									FontFamily="./Resources/#Segoe MDL2 Assets" 
-									Text="&#xE106;" 
-									FontSize="8" 
-									Foreground="{StaticResource LightForeground}"/>
-							</Button>
-							<TextBox 
-								Style="{StaticResource Item}"
-								Margin="24,0,74,0"
-								BorderThickness="0, 0, 0, 1"
-								Foreground="{StaticResource LightForeground}"
-								FontSize="20"
-								FontFamily="Segoe UI Light"
-								TextWrapping="Wrap"
-								MaxLines="2"
-								Text="{Binding Path=Content, Mode=TwoWay}"/>
-							<local:MyDatePicker			
-								HorizontalAlignment="Right"
-								BorderThickness="0"
-								Width="60"/>
-						</Grid>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
+			Background="{StaticResource TransparentBackground}"
+			MaxHeight="420">
+			<StackPanel>
+				<ItemsControl>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid 
+								Margin="30, 5, 30, 5" 
+								HorizontalAlignment="Stretch"
+								Background="{x:Null}">
+								<Button
+									Width="16" 
+									Height="16" 
+									HorizontalAlignment="Left" 
+									VerticalAlignment="Top" 
+									Margin="0, 7, 0, 0"
+									Background="{StaticResource TransparentBackground}"
+									BorderBrush="{x:Null}"
+									Click="RemoveItem">
+									<TextBlock 
+										FontFamily="./Resources/#Segoe MDL2 Assets" 
+										Text="&#xE106;" 
+										FontSize="8" 
+										Foreground="{StaticResource LightForeground}"/>
+								</Button>
+								<TextBox 
+									Style="{StaticResource Item}"
+									Margin="24,0,74,0"
+									BorderThickness="0, 0, 0, 1"
+									Foreground="{StaticResource LightForeground}"
+									FontSize="20"
+									FontFamily="Segoe UI Light"
+									TextWrapping="Wrap"
+									MaxLines="2"
+									Text="{Binding Path=Content, Mode=TwoWay}"/>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+				<ItemsControl ItemsSource="{Binding ElementName=Window, Path=TodoItems}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid 
+								Margin="30, 5, 30, 5" 
+								HorizontalAlignment="Stretch"
+								Background="{x:Null}">
+								<Grid.Resources>
+									<Style TargetType="{x:Type DatePickerTextBox}">
+										<Setter Property="Control.Template">
+											<Setter.Value>
+												<ControlTemplate>
+													<TextBox
+														x:Name="PART_TextBox" 
+														Text="{Binding Path=DueDate, Converter={StaticResource DateConverter}}" 
+														FontSize="20"
+														FontFamily="Segoe UI Semibold"
+														Foreground="{Binding Path=DueDate, Converter={StaticResource ColorConverter}}"
+														Background="{StaticResource TransparentBackground}"
+														HorizontalAlignment="Right"
+														VerticalAlignment="Stretch"
+														TextAlignment="Right"
+														BorderThickness="0"/>
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</Grid.Resources>
+								<Button
+									Width="16" 
+									Height="16" 
+									HorizontalAlignment="Left" 
+									VerticalAlignment="Top" 
+									Margin="0, 7, 0, 0"
+									Background="{StaticResource TransparentBackground}" 
+									BorderBrush="{x:Null}"
+									Click="RemoveItem">
+									<TextBlock 
+										FontFamily="./Resources/#Segoe MDL2 Assets" 
+										Text="&#xE106;" 
+										FontSize="8" 
+										Foreground="{StaticResource LightForeground}"/>
+								</Button>
+								<TextBox 
+									Style="{StaticResource Item}"
+									Margin="24,0,74,0"
+									BorderThickness="0, 0, 0, 1"
+									Foreground="{StaticResource LightForeground}"
+									FontSize="20"
+									FontFamily="Segoe UI Light"
+									TextWrapping="Wrap"
+									MaxLines="2"
+									Text="{Binding Path=Content, Mode=TwoWay}"/>
+								<local:MyDatePicker			
+									HorizontalAlignment="Right"
+									BorderThickness="0"
+									Width="60"/>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
 		</ScrollViewer>
-		<Grid Grid.Row="2">
+		<Grid Height="58">
 			<Line X1="30" X2="390" Stroke="White"/>
 			<Grid
 				Margin="30,10,30,10">
-				<Button 
-					BorderBrush="{x:Null}" 
-					Background="{StaticResource TransparentBackground}" 
-					Click="AddButton_Click">
-					<TextBlock Style="{StaticResource Body}" Text="Add"/>
-				</Button>
+				<Grid 
+					Margin="0, 5" 
+					HorizontalAlignment="Stretch"
+					Background="{x:Null}">
+					<Grid.Resources>
+						<Style TargetType="{x:Type DatePickerTextBox}">
+							<Setter Property="Control.Template">
+								<Setter.Value>
+									<ControlTemplate>
+										<TextBox
+											x:Name="PART_TextBox" 
+											Text="{Binding Mode=OneTime, Converter={StaticResource DateConverter}}" 
+											FontSize="20"
+											FontFamily="Segoe UI Semibold"
+											Foreground="{Binding Mode=OneTime, Converter={StaticResource ColorConverter}}"
+											Background="{StaticResource TransparentBackground}"
+											HorizontalAlignment="Right"
+											VerticalAlignment="Stretch"
+											TextAlignment="Right"
+											BorderThickness="0"/>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Grid.Resources>
+					<ToggleButton
+						x:Name="Toggle"
+						Width="28" 
+						Height="28" 
+						HorizontalAlignment="Left" 
+						VerticalAlignment="Center">
+						<TextBlock 
+							FontFamily="./Resources/#Segoe MDL2 Assets" 
+							Text="&#xE840;" 
+							FontSize="16"/>
+					</ToggleButton>
+					<Grid Margin="38,0,70,0">
+						<TextBox 
+							x:Name="InputBox"					
+							Foreground="{StaticResource LightForeground}"
+							FontSize="20"
+							FontFamily="Segoe UI Light"
+							TextWrapping="Wrap"
+							MaxLines="2"
+							BorderThickness="0, 0, 0, 1"
+							KeyUp="InputBox_Enter">
+							<TextBox.Style>
+								<Style TargetType="TextBox">
+									<Setter Property="BorderBrush" Value="{x:Null}"/>
+									<Setter Property="Background" Value="{StaticResource TransparentBackground}"/>
+									<Style.Triggers>
+										<Trigger Property="IsFocused" Value="True">
+											<Setter Property="BorderBrush" Value="{StaticResource LightForeground}"/>
+											<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+										</Trigger>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+											<Setter Property="BorderBrush" Value="{x:Null}"/>
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</TextBox.Style>
+						</TextBox>
+						<TextBlock 
+							IsHitTestVisible="False" 
+							Text="Something to do ..." 
+							VerticalAlignment="Center" 
+							HorizontalAlignment="Left" 
+							Margin="10,0,0,0" 
+							FontSize="20"
+							FontFamily="Segoe UI Light"
+							Foreground="{StaticResource HighlightBackground}">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Style.Triggers>
+										<DataTrigger 
+											Binding="{Binding Text, ElementName=InputBox}" Value="">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</Grid>
+					<local:MyDatePicker	
+						x:Name="DueDate"
+						HorizontalAlignment="Right"
+						BorderThickness="0"
+						Width="60"
+						DataContext="{Binding ElementName=Window, Path=DisplayedDueDate, Mode=TwoWay}"
+						IsEnabled="{Binding ElementName=Toggle, Path=IsChecked, Converter={StaticResource NegateConverter}}"/>
+					<TextBlock
+						Text="∞" 
+						HorizontalAlignment="Right" 
+						VerticalAlignment="Center"
+						Width="60"
+						FontSize="30"
+						Opacity="0.5"
+						Foreground="{StaticResource LightForeground}"
+						TextAlignment="Center"
+						FontFamily="Segoe UI Black"
+						Visibility="{Binding ElementName=Toggle, Path=IsChecked, Converter={StaticResource VisibilityConverter}}"/>
+				</Grid>
 			</Grid>
 		</Grid>
-	</Grid>
+	</StackPanel>
 </Window>
