@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ToDue2_FrameworkImpl.Properties {
+namespace ToDue2.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -97,42 +97,6 @@ namespace ToDue2_FrameworkImpl.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool AutoStart {
-            get {
-                return ((bool)(this["AutoStart"]));
-            }
-            set {
-                this["AutoStart"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool ShowInTaskBar {
-            get {
-                return ((bool)(this["ShowInTaskBar"]));
-            }
-            set {
-                this["ShowInTaskBar"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool HideFromTaskManager {
-            get {
-                return ((bool)(this["HideFromTaskManager"]));
-            }
-            set {
-                this["HideFromTaskManager"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0.75")]
         public double Scale {
             get {
@@ -176,6 +140,18 @@ namespace ToDue2_FrameworkImpl.Properties {
             }
             set {
                 this["AdjustedMarginY"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowBackground {
+            get {
+                return ((bool)(this["ShowBackground"]));
+            }
+            set {
+                this["ShowBackground"] = value;
             }
         }
     }

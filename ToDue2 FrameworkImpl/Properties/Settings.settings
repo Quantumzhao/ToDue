@@ -1,5 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ToDue2_FrameworkImpl.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="ToDue2.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="TodoItems" Type="System.String" Scope="User">
@@ -20,15 +20,6 @@
     <Setting Name="PinnedItems" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="AutoStart" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="ShowInTaskBar" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="HideFromTaskManager" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="Scale" Type="System.Double" Scope="User">
       <Value Profile="(Default)">0.75</Value>
     </Setting>
@@ -40,6 +31,9 @@
     </Setting>
     <Setting Name="AdjustedMarginY" Type="System.Double" Scope="User">
       <Value Profile="(Default)">-80</Value>
+    </Setting>
+    <Setting Name="ShowBackground" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

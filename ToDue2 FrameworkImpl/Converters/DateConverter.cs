@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text;
 using System.Windows.Data;
 
-namespace ToDue2_FrameworkImpl.Converters
+namespace ToDue2.Converters
 {
 	public class DateConverter : IValueConverter
 	{

@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.Text;
 using System.Linq;
 
-namespace ToDue2_FrameworkImpl
+namespace ToDue2
 {
 	public class ObservableSortedList : List<TodoItem>, INotifyCollectionChanged
 	{

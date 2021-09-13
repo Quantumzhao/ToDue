@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace ToDue2_FrameworkImpl
+namespace ToDue2
 {
 	public class Win32
 	{
@@ -21,7 +21,7 @@ namespace ToDue2_FrameworkImpl
         public enum GetWindowLongFields
         {
             // ...
-            GWL_EXSTYLE = (-20),
+            GWL_EXSTYLE = -20,
             // ...
         }
 

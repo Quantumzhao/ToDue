@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using ToDue2_FrameworkImpl.Properties;
+using ToDue2.Properties;
 
-namespace ToDue2_FrameworkImpl
+namespace ToDue2
 {
 	[Serializable]
 	public class TodoItem : INotifyPropertyChanged

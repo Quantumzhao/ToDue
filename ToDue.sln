@@ -5,11 +5,9 @@ VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5C779A20-ADAF-4324-BE3C-C4DADEBC46EE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDue2", "ToDue2\ToDue2.csproj", "{23E7FA0C-B696-4436-883F-0A589DBE0C0B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDue", "Legacy\ToDue.csproj", "{E9EAA516-7137-4CE8-8757-67272AFE1C84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDue2 FrameworkImpl", "ToDue2 FrameworkImpl\ToDue2 FrameworkImpl.csproj", "{B3083B23-76EE-4CEE-97AF-D99681CF1261}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDue2", "ToDue2 FrameworkImpl\ToDue2.csproj", "{B3083B23-76EE-4CEE-97AF-D99681CF1261}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +15,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{23E7FA0C-B696-4436-883F-0A589DBE0C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{23E7FA0C-B696-4436-883F-0A589DBE0C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{23E7FA0C-B696-4436-883F-0A589DBE0C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{23E7FA0C-B696-4436-883F-0A589DBE0C0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E9EAA516-7137-4CE8-8757-67272AFE1C84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E9EAA516-7137-4CE8-8757-67272AFE1C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9EAA516-7137-4CE8-8757-67272AFE1C84}.Release|Any CPU.ActiveCfg = Release|Any CPU

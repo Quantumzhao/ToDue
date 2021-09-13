@@ -4,7 +4,7 @@ using System.Text;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 
-namespace ToDue2_FrameworkImpl
+namespace ToDue2
 {
 	public class MyDatePicker : DatePicker
 	{

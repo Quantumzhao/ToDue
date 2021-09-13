@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Windows.Controls;
 using System.Windows;
 
-namespace ToDue2_FrameworkImpl.Converters
+namespace ToDue2.Converters
 {
 	class PriorityToColorConverter : IValueConverter
 	{

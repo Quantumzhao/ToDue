@@ -20,9 +20,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using ToDue2_FrameworkImpl.Properties;
+using ToDue2.Properties;
 
-namespace ToDue2_FrameworkImpl
+namespace ToDue2
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -90,18 +90,25 @@ namespace ToDue2_FrameworkImpl
 
 		private void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			if (Settings.Default.HideFromTaskManager)
+			WindowInteropHelper wndHelper = new WindowInteropHelper(this);
+			int exStyle = (int)Win32.GetWindowLong(wndHelper.Handle, (int)Win32.GetWindowLongFields.GWL_EXSTYLE);
+			exStyle |= (int)Win32.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
+			Win32.SetWindowLong(wndHelper.Handle, (int)Win32.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
+
+			(App.Current as App).TryAddToStartupLocation();
+
+			Dark.IsChecked = !Settings.Default.IsLight;
+
+			if (Settings.Default.ShowBackground)
 			{
-				WindowInteropHelper wndHelper = new WindowInteropHelper(this);
-				int exStyle = (int)Win32.GetWindowLong(wndHelper.Handle, (int)Win32.GetWindowLongFields.GWL_EXSTYLE);
-				exStyle |= (int)Win32.ExtendedWindowStyles.WS_EX_TOOLWINDOW;
-				Win32.SetWindowLong(wndHelper.Handle, (int)Win32.GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
+				ShowBackground.IsChecked = true;
+				MainPanel.Background = this.Resources["Background"] as SolidColorBrush;
+			}
+			else
+			{
+				ShowBackground.IsChecked = false;
 			}
 
-			ShowInTaskBar.IsChecked = Settings.Default.ShowInTaskBar;
-			HideFromTaskManager.IsChecked = Settings.Default.HideFromTaskManager;
-			AutoStart.IsChecked = Settings.Default.AutoStart;
-			Dark.IsChecked = !Settings.Default.IsLight;
 			SetScaleAndMargin(Settings.Default.Scale);
 
 			var settings = Settings.Default;
@@ -126,10 +133,10 @@ namespace ToDue2_FrameworkImpl
 				PinnedItems = new ObservableCollection<TodoItem>();
 			}
 			else using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.PinnedItems)))
-				{
-					BinaryFormatter bf = new BinaryFormatter();
-					PinnedItems = new ObservableCollection<TodoItem>((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
-				}
+			{
+				BinaryFormatter bf = new BinaryFormatter();
+				PinnedItems = new ObservableCollection<TodoItem>((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
+			}
 
 #else
 			TodoItems = new ObservableSortedList();
@@ -178,46 +185,6 @@ namespace ToDue2_FrameworkImpl
 			this.Left = 0;
 			Settings.Default.StartupLocationX = 0;
 			Settings.Default.StartupLocationY = 0;
-			Settings.Default.Save();
-		}
-
-		private void AutoStart_Checked(object sender, RoutedEventArgs e)
-		{
-			(App.Current as App).TryAddToStartupLocation();
-			Settings.Default.AutoStart = true;
-			Settings.Default.Save();
-		}
-
-		private void AutoStart_Unchecked(object sender, RoutedEventArgs e)
-		{
-			(App.Current as App).TryRemoveFromStartupLocation();
-			Settings.Default.AutoStart = false;
-			Settings.Default.Save();
-		}
-
-		private void Hide_Checked(object sender, RoutedEventArgs e)
-		{
-			Settings.Default.HideFromTaskManager = true;
-			Settings.Default.Save();
-		}
-
-		private void Hide_Unchecked(object sender, RoutedEventArgs e)
-		{
-			Settings.Default.HideFromTaskManager = false;
-			Settings.Default.Save();
-		}
-
-		private void ShowInTaskBar_Checked(object sender, RoutedEventArgs e)
-		{
-			this.ShowInTaskbar = true;
-			Settings.Default.ShowInTaskBar = true;
-			Settings.Default.Save();
-		}
-
-		private void ShowInTaskBar_Unchecked(object sender, RoutedEventArgs e)
-		{
-			this.ShowInTaskbar = false;
-			Settings.Default.ShowInTaskBar = false;
 			Settings.Default.Save();
 		}
 
@@ -368,6 +335,7 @@ namespace ToDue2_FrameworkImpl
 				this.Resources["OK"] = App.Current.Resources["LightOK"];
 				this.Resources["HighlightBackground"] = App.Current.Resources["LightHighlightBackground"];
 				this.Resources["PressedBackground"] = App.Current.Resources["LightPressedBackground"];
+				this.Resources["Background"] = App.Current.Resources["DarkBackground"];
 			}
 			else
 			{
@@ -377,7 +345,22 @@ namespace ToDue2_FrameworkImpl
 				this.Resources["OK"] = App.Current.Resources["DarkOK"];
 				this.Resources["HighlightBackground"] = App.Current.Resources["DarkHighlightBackground"];
 				this.Resources["PressedBackground"] = App.Current.Resources["DarkPressedBackground"];
+				this.Resources["Background"] = App.Current.Resources["LightBackground"];
 			}
+		}
+
+		private void ShowBackground_Checked(object sender, RoutedEventArgs e)
+		{
+			MainPanel.Background = this.Resources["Background"] as SolidColorBrush;
+			Settings.Default.ShowBackground = true;
+			Settings.Default.Save();
+		}
+
+		private void ShowBackground_Unchecked(object sender, RoutedEventArgs e)
+		{
+			MainPanel.Background = this.Resources["TransparentBackground"] as SolidColorBrush;
+			Settings.Default.ShowBackground = false;
+			Settings.Default.Save();
 		}
 	}
 }
