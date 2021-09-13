@@ -1,0 +1,31 @@
+﻿<Application x:Class="ToDue2_FrameworkImpl.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ToDue2_FrameworkImpl"
+             StartupUri="MainWindow.xaml">
+	<Application.Resources>
+		<SolidColorBrush x:Key="LightAlert" Color="#FFFFAEBB"/>
+		<SolidColorBrush x:Key="DarkAlert" Color="#FFBE6878"/>
+
+		<SolidColorBrush x:Key="RedAlert" Color="#FFFF4057"/>
+
+		<SolidColorBrush x:Key="LightWarning" Color="#FFECF38D"/>
+		<SolidColorBrush x:Key="DarkWarning" Color="#FFBCC26B"/>
+
+		<SolidColorBrush x:Key="LightOK" Color="#FF83E8A7"/>
+		<SolidColorBrush x:Key="DarkOK" Color="#FF6BB585"/>
+
+		<SolidColorBrush x:Key="LightForeground" Color="White"/>
+		<SolidColorBrush x:Key="DarkForeground" Color="#FF1A1A1A"/>
+
+		<SolidColorBrush x:Key="TransparentBackground" Color="#017F7F7F"/>
+
+		<SolidColorBrush x:Key="LightHighlightBackground" Color="#1FFFFFFF"/>
+		<SolidColorBrush x:Key="DarkHighlightBackground" Color="#0C000000"/>
+
+		<SolidColorBrush x:Key="LightPressedBackground" Color="#3FFFFFFF"/>
+		<SolidColorBrush x:Key="DarkPressedBackground" Color="#19000000"/>
+
+		<SolidColorBrush x:Key="InfoHighlight" Color="#FF2C6FC2"/>
+	</Application.Resources>
+</Application>

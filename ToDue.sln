@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ToDue2", "ToDue2\ToDue2.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDue", "Legacy\ToDue.csproj", "{E9EAA516-7137-4CE8-8757-67272AFE1C84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToDue2 FrameworkImpl", "ToDue2 FrameworkImpl\ToDue2 FrameworkImpl.csproj", "{B3083B23-76EE-4CEE-97AF-D99681CF1261}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{E9EAA516-7137-4CE8-8757-67272AFE1C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9EAA516-7137-4CE8-8757-67272AFE1C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9EAA516-7137-4CE8-8757-67272AFE1C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3083B23-76EE-4CEE-97AF-D99681CF1261}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3083B23-76EE-4CEE-97AF-D99681CF1261}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3083B23-76EE-4CEE-97AF-D99681CF1261}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3083B23-76EE-4CEE-97AF-D99681CF1261}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

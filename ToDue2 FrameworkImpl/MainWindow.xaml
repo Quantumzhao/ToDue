@@ -1,0 +1,713 @@
+﻿<Window 
+	x:Class="ToDue2_FrameworkImpl.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:ToDue2_FrameworkImpl"
+	xmlns:converters="clr-namespace:ToDue2_FrameworkImpl.Converters"
+	xmlns:Settings="clr-namespace:ToDue2_FrameworkImpl.Properties"
+	xmlns:tb="http://www.hardcodet.net/taskbar"
+	xmlns:System="clr-namespace:System;assembly=mscorlib"
+	mc:Ignorable="d"
+	Title="ToDue 2" 
+	Height="633" 
+	MinWidth="420"
+	Width="420"
+	Background="Transparent"
+	StateChanged="Window_StateChanged" 
+	Loaded="Window_Loaded"
+	Unloaded="SaveWindowLocation"
+	WindowStyle="None" 
+	AllowsTransparency="True" 
+	Left="10" 
+	Top="10"
+	Name="Window"
+	ShowInTaskbar="False"
+	ShowActivated="False"
+	Icon=".\icon [256x256].ico" 
+	ResizeMode="NoResize">
+	<Window.Resources>
+		<converters:DateConverter x:Key="DateConverter"/>
+		<converters:ColorConverter x:Key="ColorConverter"/>
+		<converters:NegateConverter x:Key="NegateConverter"/>
+		<converters:VisibilityConverter x:Key="VisibilityConverter"/>
+		<converters:PriorityToColorConverter x:Key="PriorityToColorConverter"/>
+		<converters:PriorityToFontWeightConverter x:Key="PriorityToFontWeightConverter"/>
+		<Style x:Key="DefaultButton" TargetType="Button">
+			<Style.Setters>
+				<Setter 
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="Button">
+							<Border 
+								Background="{StaticResource TransparentBackground}"
+								BorderBrush="{x:Null}">
+								<ContentPresenter 
+									HorizontalAlignment="Center" 
+									VerticalAlignment="Center">
+								</ContentPresenter>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border 
+										Background="{DynamicResource HighlightBackground}"
+										BorderBrush="{x:Null}">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsPressed" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border 
+										Background="{DynamicResource PressedBackground}"
+										BorderBrush="{x:Null}">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style x:Key="Item" TargetType="TextBox">
+			<Style.Setters>
+				<Setter 
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+			</Style.Setters>
+		</Style>
+		<Style TargetType="local:MyDatePicker">
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsEnabled" Value="False">
+					<Trigger.Setters>
+						<Setter Property="Button.Visibility" Value="Collapsed"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style x:Key="Title" TargetType="TextBlock">
+			<Style.Setters>
+				<Setter Property="FontFamily" Value="./Resources/#Conservative Simplicity"/>
+				<Setter 
+					Property="Foreground" 
+					Value="{DynamicResource Foreground}"/>
+				<Setter Property="HorizontalAlignment" Value="Left"/>
+				<Setter Property="VerticalAlignment" Value="Top"/>
+				<Setter Property="FontSize" Value="70"/>
+			</Style.Setters>
+		</Style>
+		<Style x:Key="Body" TargetType="TextBlock">
+			<Style.Setters>
+				<Setter Property="FontFamily" Value="Segoe UI Light"/>
+				<Setter 
+					Property="Foreground" 
+					Value="{DynamicResource Foreground}"/>
+				<Setter Property="FontSize" Value="20"/>
+			</Style.Setters>
+		</Style>
+		<Style x:Key="Pin" TargetType="ToggleButton">
+			<Style.Setters>
+				<Setter 
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Opacity" Value="0.5"/>
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="ToggleButton">
+							<Border 
+								Background="{StaticResource TransparentBackground}"
+								BorderBrush="{x:Null}"
+								CornerRadius="14">
+								<ContentPresenter 
+									HorizontalAlignment="Center" 
+									VerticalAlignment="Center">
+								</ContentPresenter>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{DynamicResource HighlightBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{StaticResource InfoHighlight}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsChecked" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{DynamicResource PressedBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{StaticResource InfoHighlight}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style x:Key="Priority" TargetType="ToggleButton">
+			<Style.Setters>
+				<Setter
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Opacity" Value="0.5"/>
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="ToggleButton">
+							<Border 
+								Background="{StaticResource TransparentBackground}"
+								BorderBrush="{x:Null}"
+								CornerRadius="14">
+								<ContentPresenter 
+									HorizontalAlignment="Center" 
+									VerticalAlignment="Center">
+								</ContentPresenter>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{DynamicResource HighlightBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{StaticResource RedAlert}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsPressed" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{DynamicResource PressedBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{StaticResource RedAlert}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsChecked" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{DynamicResource PressedBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{StaticResource RedAlert}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+	</Window.Resources>
+	<StackPanel 
+		x:Name="MainPanel" 
+		RenderTransformOrigin="0.5,0.5"
+		MouseDown="MainPanel_MouseDown"
+		Background="{StaticResource TransparentBackground}"
+		Height="633" 
+		Width="420" 
+		HorizontalAlignment="Left" 
+		VerticalAlignment="Top"
+		Margin="-50,-80,0,0">
+		<StackPanel.RenderTransform>
+			<TransformGroup>
+				<ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
+			</TransformGroup>
+		</StackPanel.RenderTransform>
+		<tb:TaskbarIcon
+			IconSource="/Resources/icon [256x256].ico"
+			ToolTipText="ToDue2">
+			<tb:TaskbarIcon.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Opacity">
+						<MenuItem Header="25%" Click="Transparency_Click" Tag="0.25"/>
+						<MenuItem Header="50%" Click="Transparency_Click" Tag="0.5"/>
+						<MenuItem Header="75%" Click="Transparency_Click" Tag="0.75"/>
+						<MenuItem Header="100%" Click="Transparency_Click" Tag="1"/>
+					</MenuItem>
+					<MenuItem Header="Scale">
+						<MenuItem Header="Small" Click="Scale_Click" Tag="0.5"/>
+						<MenuItem Header="Normal" Click="Scale_Click" Tag="0.75"/>
+						<MenuItem Header="Large" Click="Scale_Click" Tag="1"/>
+					</MenuItem>
+					<MenuItem 
+						x:Name="Dark" 
+						Header="Dark" 
+						IsCheckable="True"
+						Checked="Theme_Checked" 
+						Unchecked="Theme_UnChecked" 
+						ToolTip="Require reload"/>
+					<Separator/>
+					<MenuItem Header="Advanced">
+						<MenuItem 
+							Header="Reset position" 
+							Click="Reset_Click"/>
+						<MenuItem 
+							Header="Refresh" 
+							Click="Refresh_Click"/>
+						<Separator/>
+						<MenuItem 
+							x:Name="AutoStart"
+							Header="Start on boot up" 
+							IsCheckable="True" 
+							IsChecked="True" 
+							Checked="AutoStart_Checked" 
+							Unchecked="AutoStart_Unchecked"/>
+						<MenuItem 
+							x:Name="ShowInTaskBar"
+							Header="Show in task bar"
+							IsCheckable="True"
+							Checked="ShowInTaskBar_Checked"
+							Unchecked="ShowInTaskBar_Unchecked"
+							ToolTip="If remains unchecked, it can not stay on desktop after pressing Win + D">
+						</MenuItem>
+						<MenuItem
+							x:Name="HideFromTaskManager"
+							Header="Hide from Task Manager (Application Category)" 
+							ToolTip="Requires reload"
+							IsCheckable="True"
+							Checked="Hide_Checked"
+							Unchecked="Hide_Unchecked"/>
+					</MenuItem>
+					<Separator/>
+					<MenuItem Header="Exit" Click="Exit_Click" />
+				</ContextMenu>
+			</tb:TaskbarIcon.ContextMenu>
+		</tb:TaskbarIcon>
+		<Grid Height="152">
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="T" 
+				Margin="26,54,0,0" 
+				FontSize="90" 
+				Grid.RowSpan="2" 
+				Height="103" 
+				Width="64"/>
+			<TextBlock
+				Style="{StaticResource Title}"
+				Text="H" 
+				Margin="89,72,0,0" 
+				Height="80" 
+				Width="57"/>
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="I" 
+				Margin="160,72,0,0" 
+				Height="80" 
+				Width="21"/>
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="N" 
+				Margin="195,72,0,0" 
+				Height="80" 
+				Width="59"/>
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="G" 
+				Margin="270,72,0,0" 
+				Height="80" 
+				Width="55"/>
+			<TextBlock 
+				Style="{StaticResource Title}"
+				Text="S" 
+				Margin="339,72,0,0" 
+				Height="80" 
+				Width="49"/>
+
+		</Grid>
+		<ScrollViewer 
+			VerticalScrollBarVisibility="Hidden" 
+			Background="{StaticResource TransparentBackground}"
+			MaxHeight="420">
+			<StackPanel>
+				<ItemsControl ItemsSource="{Binding ElementName=Window, Path=PinnedItems}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid 
+								Margin="20, 0, 20, 0" 
+								HorizontalAlignment="Stretch"
+								MinHeight="40">
+								<Grid.Style>
+									<Style TargetType="Grid">
+										<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
+										<Style.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter Property="Background" Value="{DynamicResource PressedBackground}"/>
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</Grid.Style>
+								<Button
+									Name="PinIcon"
+									Width="60" 
+									Height="28" 
+									HorizontalAlignment="Right" 
+									VerticalAlignment="Top" 
+									Margin="0, 6, 10, 0"
+									Click="PinIcon_Click"
+									Visibility="Visible">
+									<Button.Style>
+										<Style TargetType="Button" BasedOn="{StaticResource DefaultButton}">
+											<Style.Triggers>
+												<Trigger Property="IsMouseOver" Value="True">
+													<Setter Property="Content">
+														<Setter.Value>
+															<TextBlock 
+																FontFamily="./Resources/#Segoe MDL2 Assets"
+																FontSize="16"
+																Foreground="{DynamicResource Foreground}"
+																Text="&#xE107;"/>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+												<Trigger Property="IsPressed" Value="True">
+													<Setter Property="Content">
+														<Setter.Value>
+															<TextBlock 
+																FontFamily="./Resources/#Segoe MDL2 Assets"
+																FontSize="16"
+																Foreground="{DynamicResource Foreground}"
+																Text="&#xE107;"/>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+												<Trigger Property="IsMouseOver" Value="False">
+													<Setter Property="Content">
+														<Setter.Value>
+															<TextBlock 
+																FontFamily="./Resources/#Segoe MDL2 Assets"
+																FontSize="16"
+																Foreground="{DynamicResource Foreground}"
+																Text="&#xE840;"/>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+											</Style.Triggers>
+										</Style>
+									</Button.Style>
+								</Button>
+								<TextBox 
+									Style="{StaticResource Item}"
+									Margin="24,5,74,5"
+									VerticalAlignment="Top"
+									BorderThickness="0, 0, 0, 1"
+									Foreground="{Binding Path=IsOfHighPriority, Mode=OneWay,Converter={StaticResource PriorityToColorConverter}}"
+									FontSize="22"
+									FontFamily="Segoe UI"
+									FontWeight="{Binding Path=IsOfHighPriority, Mode=OneWay, Converter={StaticResource PriorityToFontWeightConverter}}"
+									TextWrapping="Wrap"
+									MaxLines="2"
+									TextChanged="Pinned_TextChanged"
+									Text="{Binding Path=Content, Mode=OneWay}"/>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+				<ItemsControl ItemsSource="{Binding ElementName=Window, Path=TodoItems}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Grid 
+								Margin="20, 0, 20, 5" 
+								HorizontalAlignment="Stretch"
+								MinHeight="40">
+								<Grid.Style>
+									<Style TargetType="Grid">
+										<Setter Property="Background" Value="{StaticResource TransparentBackground}"/>
+										<Style.Triggers>
+											<Trigger Property="IsMouseOver" Value="True">
+												<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</Grid.Style>
+								<Grid.Resources>
+									<Style TargetType="{x:Type DatePickerTextBox}">
+										<Setter Property="Control.Template">
+											<Setter.Value>
+												<ControlTemplate>
+													<TextBox
+														x:Name="PART_TextBox" 
+														Text="{Binding Path=DueDate, Converter={StaticResource DateConverter}}" 
+														FontSize="20"
+														FontFamily="Segoe UI Semibold"
+														Foreground="{Binding Path=DueDate, Converter={StaticResource ColorConverter}}"
+														Background="{StaticResource TransparentBackground}"
+														HorizontalAlignment="Right"
+														VerticalAlignment="Stretch"
+														TextAlignment="Right"
+														BorderThickness="0"/>
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+									</Style>
+								</Grid.Resources>
+								<Button
+									Name="RemoveIcon"
+									Style="{StaticResource DefaultButton}"
+									Width="16" 
+									Height="16" 
+									HorizontalAlignment="Left" 
+									VerticalAlignment="Top" 
+									Margin="0, 13, 0, 0"
+									Background="{StaticResource TransparentBackground}" 
+									BorderBrush="{x:Null}"
+									Click="RemoveItem"
+									Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}, Converter={StaticResource VisibilityConverter}}">
+									<TextBlock 
+										FontFamily="./Resources/#Segoe MDL2 Assets" 
+										Text="&#xE106;" 
+										FontSize="8" 
+										Foreground="{DynamicResource Foreground}"/>
+								</Button>
+								<TextBox 
+									Style="{StaticResource Item}"
+									Margin="24,5,74,5"
+									VerticalAlignment="Top"
+									BorderThickness="0, 0, 0, 1"
+									Foreground="{Binding Path=IsOfHighPriority, Mode=OneWay,Converter={StaticResource PriorityToColorConverter}}"
+									FontSize="22"
+									FontFamily="Segoe UI"
+									FontWeight="{Binding Path=IsOfHighPriority, Mode=OneWay, Converter={StaticResource PriorityToFontWeightConverter}}"
+									TextWrapping="Wrap"
+									MaxLines="2"
+									TextChanged="Todo_TextChanged"
+									Text="{Binding Path=Content, Mode=OneWay}"/>
+								<local:MyDatePicker
+									HorizontalAlignment="Right"
+									VerticalAlignment="Top"
+									Margin="0, 5, 10, 0"
+									BorderThickness="0"
+									Width="60"
+									SelectedDateChanged="MyDatePicker_SelectedDateChanged"/>
+							</Grid>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
+		</ScrollViewer>
+		<Grid Margin="0, 5, 0, 0" MinHeight="58">
+			<Line X1="30" X2="390" Stroke="{DynamicResource Foreground}"/>
+			<Grid
+				Margin="10,10,30,10">
+				<Grid 
+					Margin="0, 5" 
+					HorizontalAlignment="Stretch"
+					Background="{x:Null}">
+					<Grid.Resources>
+						<Style TargetType="{x:Type DatePickerTextBox}">
+							<Setter Property="Control.Template">
+								<Setter.Value>
+									<ControlTemplate>
+										<TextBox
+											x:Name="PART_TextBox" 
+											Text="{Binding Mode=OneTime, Converter={StaticResource DateConverter}}" 
+											FontSize="20"
+											FontFamily="Segoe UI Semibold"
+											Foreground="{Binding Mode=OneTime, Converter={StaticResource ColorConverter}}"
+											Background="{StaticResource TransparentBackground}"
+											HorizontalAlignment="Right"
+											VerticalAlignment="Stretch"
+											TextAlignment="Right"
+											BorderThickness="0"/>
+									</ControlTemplate>
+								</Setter.Value>
+							</Setter>
+						</Style>
+					</Grid.Resources>
+					<ToggleButton
+						x:Name="Toggle"
+						Style="{StaticResource Pin}"
+						Width="28" 
+						Height="28" 
+						HorizontalAlignment="Left" 
+						VerticalAlignment="Center">
+						<TextBlock 
+							FontFamily="./Resources/#Segoe MDL2 Assets" 
+							Text="&#xE840;" 
+							FontSize="16"/>
+					</ToggleButton>
+					<ToggleButton
+						x:Name="Priority"
+						Style="{StaticResource Priority}"
+						Width="28" 
+						Height="28" 
+						Margin="32, 0, 0, 0"
+						HorizontalAlignment="Left" 
+						VerticalAlignment="Center">
+						<TextBlock
+							FontFamily="./Resources/#Segoe MDL2 Assets" 
+							Text="&#xE814;" 
+							FontSize="16"/>
+					</ToggleButton>
+					<Grid Margin="60,0,70,0">
+						<TextBox 
+							x:Name="InputBox"					
+							Foreground="{Binding ElementName=Priority, Path=IsChecked, Converter={StaticResource PriorityToColorConverter}}"
+							FontSize="20"
+							FontFamily="Segoe UI"
+							FontWeight="{Binding ElementName=Priority, Path=IsChecked, Converter={StaticResource PriorityToFontWeightConverter}}"
+							TextWrapping="Wrap"
+							MaxLines="2"
+							BorderThickness="0, 0, 0, 1"
+							KeyUp="InputBox_Enter">
+							<TextBox.Style>
+								<Style TargetType="TextBox">
+									<Setter Property="BorderBrush" Value="{x:Null}"/>
+									<Setter Property="Background" Value="{StaticResource TransparentBackground}"/>
+									<Style.Triggers>
+										<Trigger Property="IsMouseCaptured" Value="True">
+											<Setter Property="BorderBrush" Value="{DynamicResource Foreground}"/>
+											<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
+										</Trigger>
+										<Trigger Property="IsMouseOver" Value="True">
+											<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
+											<Setter Property="BorderBrush" Value="{x:Null}"/>
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</TextBox.Style>
+						</TextBox>
+						<TextBlock 
+							IsHitTestVisible="False" 
+							Text="Something to do ..." 
+							VerticalAlignment="Center" 
+							HorizontalAlignment="Left" 
+							Margin="10,0,0,0" 
+							FontSize="20"
+							FontFamily="Segoe UI Light"
+							Opacity="0.5"
+							Foreground="{DynamicResource Foreground}">
+							<TextBlock.Style>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="Visibility" Value="Collapsed"/>
+									<Style.Triggers>
+										<DataTrigger 
+											Binding="{Binding Text, ElementName=InputBox}" Value="">
+											<Setter Property="Visibility" Value="Visible"/>
+										</DataTrigger>
+									</Style.Triggers>
+								</Style>
+							</TextBlock.Style>
+						</TextBlock>
+					</Grid>
+					<local:MyDatePicker	
+						x:Name="DueDate"
+						HorizontalAlignment="Right"
+						BorderThickness="0"
+						Width="60"
+						DataContext="{Binding ElementName=Window, Path=DisplayedDueDate, Mode=TwoWay}"
+						IsEnabled="{Binding ElementName=Toggle, Path=IsChecked, Converter={StaticResource NegateConverter}}"/>
+					<TextBlock
+						Text="∞" 
+						HorizontalAlignment="Right" 
+						VerticalAlignment="Top"
+						Margin="0, -9, 0, 0"
+						Width="60"
+						FontSize="30"
+						Opacity="0.5"
+						Foreground="{DynamicResource Foreground}"
+						TextAlignment="Center"
+						FontFamily="Segoe UI Black"
+						Visibility="{Binding ElementName=Toggle, Path=IsChecked, Converter={StaticResource VisibilityConverter}}"/>
+				</Grid>
+			</Grid>
+		</Grid>
+	</StackPanel>
+</Window>
