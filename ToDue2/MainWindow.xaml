@@ -17,6 +17,7 @@
 	Background="Transparent"
 	StateChanged="Window_StateChanged" 
 	Loaded="Window_Loaded"
+	Unloaded="SaveWindowLocation"
 	WindowStyle="None" 
 	AllowsTransparency="True" 
 	Left="10" 
@@ -27,18 +28,13 @@
 	Icon="/icon [256x256].ico" 
 	ResizeMode="NoResize">
 	<Window.Resources>
-		<SolidColorBrush x:Key="DarkForeGround" Color="Black"/>
-		<SolidColorBrush x:Key="TransparentBackground" Color="#02000000"/>
-		<SolidColorBrush x:Key="HighlightBackground" Color="#33FFFFFF"/>
-		<SolidColorBrush x:Key="PressedBackGround" Color="#7FFFFFFF"/>
-		<SolidColorBrush x:Key="InfoHighlight" Color="#FF2C6FC2"/>
 		<converters:DateConverter x:Key="DateConverter"/>
 		<converters:ColorConverter x:Key="ColorConverter"/>
 		<converters:NegateConverter x:Key="NegateConverter"/>
 		<converters:VisibilityConverter x:Key="VisibilityConverter"/>
 		<converters:PriorityToColorConverter x:Key="PriorityToColorConverter"/>
 		<converters:PriorityToFontWeightConverter x:Key="PriorityToFontWeightConverter"/>
-		<Style TargetType="Button">
+		<Style x:Key="DefaultButton" TargetType="Button">
 			<Style.Setters>
 				<Setter 
 					Property="Background" 
@@ -66,7 +62,7 @@
 							<Setter.Value>
 								<ControlTemplate TargetType="Button">
 									<Border 
-										Background="{StaticResource HighlightBackground}"
+										Background="{DynamicResource HighlightBackground}"
 										BorderBrush="{x:Null}">
 										<ContentPresenter 
 											HorizontalAlignment="Center" 
@@ -84,7 +80,7 @@
 							<Setter.Value>
 								<ControlTemplate TargetType="Button">
 									<Border 
-										Background="{StaticResource PressedBackGround}"
+										Background="{DynamicResource PressedBackground}"
 										BorderBrush="{x:Null}">
 										<ContentPresenter 
 											HorizontalAlignment="Center" 
@@ -110,7 +106,7 @@
 			<Style.Triggers>
 				<Trigger Property="IsMouseOver" Value="True">
 					<Trigger.Setters>
-						<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+						<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
 					</Trigger.Setters>
 				</Trigger>
 				<Trigger Property="IsEnabled" Value="False">
@@ -125,7 +121,7 @@
 				<Setter Property="FontFamily" Value="./Resources/#Conservative Simplicity"/>
 				<Setter 
 					Property="Foreground" 
-					Value="{StaticResource LightForeground}"/>
+					Value="{DynamicResource Foreground}"/>
 				<Setter Property="HorizontalAlignment" Value="Left"/>
 				<Setter Property="VerticalAlignment" Value="Top"/>
 				<Setter Property="FontSize" Value="70"/>
@@ -136,7 +132,7 @@
 				<Setter Property="FontFamily" Value="Segoe UI Light"/>
 				<Setter 
 					Property="Foreground" 
-					Value="{StaticResource LightForeground}"/>
+					Value="{DynamicResource Foreground}"/>
 				<Setter Property="FontSize" Value="20"/>
 			</Style.Setters>
 		</Style>
@@ -147,7 +143,7 @@
 					Value="{StaticResource TransparentBackground}"/>
 				<Setter Property="BorderBrush" Value="{x:Null}"/>
 				<Setter Property="Opacity" Value="0.5"/>
-				<Setter Property="TextElement.Foreground" Value="{StaticResource LightForeground}"/>
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}"/>
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="ToggleButton">
@@ -171,7 +167,7 @@
 							<Setter.Value>
 								<ControlTemplate TargetType="ToggleButton">
 									<Border 
-										Background="{StaticResource HighlightBackground}"
+										Background="{DynamicResource HighlightBackground}"
 										BorderBrush="{x:Null}"
 										CornerRadius="14">
 										<ContentPresenter 
@@ -192,7 +188,7 @@
 							<Setter.Value>
 								<ControlTemplate TargetType="ToggleButton">
 									<Border 
-										Background="{StaticResource PressedBackGround}"
+										Background="{DynamicResource PressedBackground}"
 										BorderBrush="{x:Null}"
 										CornerRadius="14">
 										<ContentPresenter 
@@ -216,7 +212,7 @@
 					Value="{StaticResource TransparentBackground}"/>
 				<Setter Property="BorderBrush" Value="{x:Null}"/>
 				<Setter Property="Opacity" Value="0.5"/>
-				<Setter Property="TextElement.Foreground" Value="{StaticResource LightForeground}"/>
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}"/>
 				<Setter Property="Template">
 					<Setter.Value>
 						<ControlTemplate TargetType="ToggleButton">
@@ -240,7 +236,7 @@
 							<Setter.Value>
 								<ControlTemplate TargetType="ToggleButton">
 									<Border 
-										Background="{StaticResource HighlightBackground}"
+										Background="{DynamicResource HighlightBackground}"
 										BorderBrush="{x:Null}"
 										CornerRadius="14">
 										<ContentPresenter 
@@ -261,7 +257,7 @@
 							<Setter.Value>
 								<ControlTemplate TargetType="ToggleButton">
 									<Border 
-										Background="{StaticResource PressedBackGround}"
+										Background="{DynamicResource PressedBackground}"
 										BorderBrush="{x:Null}"
 										CornerRadius="14">
 										<ContentPresenter 
@@ -278,6 +274,21 @@
 				</Trigger>
 				<Trigger Property="IsChecked" Value="True">
 					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{DynamicResource PressedBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
 						<Setter Property="TextElement.Foreground" Value="{StaticResource RedAlert}"/>
 						<Setter Property="Opacity" Value="1"/>
 					</Trigger.Setters>
@@ -285,13 +296,19 @@
 			</Style.Triggers>
 		</Style>
 	</Window.Resources>
-	<StackPanel RenderTransformOrigin="0.5,0.5">
+	<StackPanel 
+		x:Name="MainPanel" 
+		RenderTransformOrigin="0.5,0.5"
+		MouseDown="MainPanel_MouseDown"
+		Background="{StaticResource TransparentBackground}"
+		Height="633" 
+		Width="420" 
+		HorizontalAlignment="Left" 
+		VerticalAlignment="Top"
+		Margin="-50,-80,0,0">
 		<StackPanel.RenderTransform>
 			<TransformGroup>
 				<ScaleTransform ScaleX="0.75" ScaleY="0.75"/>
-				<SkewTransform/>
-				<RotateTransform/>
-				<TranslateTransform/>
 			</TransformGroup>
 		</StackPanel.RenderTransform>
 		<tb:TaskbarIcon
@@ -305,7 +322,18 @@
 						<MenuItem Header="75%" Click="Transparency_Click" Tag="0.75"/>
 						<MenuItem Header="100%" Click="Transparency_Click" Tag="1"/>
 					</MenuItem>
-					<MenuItem Header="Dark" IsCheckable="True" Checked="Theme_Checked" Unchecked="Theme_UnChecked"/>
+					<MenuItem Header="Scale">
+						<MenuItem Header="Small" Click="Scale_Click" Tag="0.5"/>
+						<MenuItem Header="Normal" Click="Scale_Click" Tag="0.75"/>
+						<MenuItem Header="Large" Click="Scale_Click" Tag="1"/>
+					</MenuItem>
+					<MenuItem 
+						x:Name="Dark" 
+						Header="Dark" 
+						IsCheckable="True"
+						Checked="Theme_Checked" 
+						Unchecked="Theme_UnChecked" 
+						ToolTip="Require reload"/>
 					<Separator/>
 					<MenuItem Header="Advanced">
 						<MenuItem 
@@ -382,56 +410,92 @@
 				Margin="339,72,0,0" 
 				Height="80" 
 				Width="49"/>
-			
+
 		</Grid>
 		<ScrollViewer 
-			VerticalScrollBarVisibility="Auto" 
+			VerticalScrollBarVisibility="Hidden" 
 			Background="{StaticResource TransparentBackground}"
 			MaxHeight="420">
 			<StackPanel>
-				<ItemsControl>
+				<ItemsControl ItemsSource="{Binding ElementName=Window, Path=PinnedItems}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Grid 
-								Margin="30, 0, 30, 0"
+								Margin="20, 0, 20, 0" 
 								HorizontalAlignment="Stretch"
-								Background="{x:Null}">
+								MinHeight="40">
 								<Grid.Style>
 									<Style TargetType="Grid">
-										<Setter Property="Background" Value="{StaticResource TransparentBackground}"/>
+										<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
 										<Style.Triggers>
 											<Trigger Property="IsMouseOver" Value="True">
-												<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
-												<Setter Property="Button.Visibility" Value="Visible"/>
+												<Setter Property="Background" Value="{DynamicResource PressedBackground}"/>
 											</Trigger>
 										</Style.Triggers>
 									</Style>
 								</Grid.Style>
 								<Button
-									Width="16" 
-									Height="16" 
-									HorizontalAlignment="Left" 
+									Name="PinIcon"
+									Width="60" 
+									Height="28" 
+									HorizontalAlignment="Right" 
 									VerticalAlignment="Top" 
-									Margin="0, 7, 0, 0"
-									Background="{StaticResource TransparentBackground}"
-									BorderBrush="{x:Null}"
-									Click="RemoveItem">
-									<TextBlock 
-										FontFamily="./Resources/#Segoe MDL2 Assets" 
-										Text="&#xE106;" 
-										FontSize="8" 
-										Foreground="{StaticResource LightForeground}"/>
+									Margin="0, 6, 10, 0"
+									Click="PinIcon_Click"
+									Visibility="Visible">
+									<Button.Style>
+										<Style TargetType="Button" BasedOn="{StaticResource DefaultButton}">
+											<Style.Triggers>
+												<Trigger Property="IsMouseOver" Value="True">
+													<Setter Property="Content">
+														<Setter.Value>
+															<TextBlock 
+																FontFamily="./Resources/#Segoe MDL2 Assets"
+																FontSize="16"
+																Foreground="{DynamicResource Foreground}"
+																Text="&#xE107;"/>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+												<Trigger Property="IsPressed" Value="True">
+													<Setter Property="Content">
+														<Setter.Value>
+															<TextBlock 
+																FontFamily="./Resources/#Segoe MDL2 Assets"
+																FontSize="16"
+																Foreground="{DynamicResource Foreground}"
+																Text="&#xE107;"/>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+												<Trigger Property="IsMouseOver" Value="False">
+													<Setter Property="Content">
+														<Setter.Value>
+															<TextBlock 
+																FontFamily="./Resources/#Segoe MDL2 Assets"
+																FontSize="16"
+																Foreground="{DynamicResource Foreground}"
+																Text="&#xE840;"/>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+											</Style.Triggers>
+										</Style>
+									</Button.Style>
 								</Button>
 								<TextBox 
 									Style="{StaticResource Item}"
-									Margin="24,0,74,0"
+									Margin="24,5,74,5"
+									VerticalAlignment="Top"
 									BorderThickness="0, 0, 0, 1"
-									Foreground="{StaticResource LightForeground}"
-									FontSize="20"
-									FontFamily="Segoe UI Light"
+									Foreground="{Binding Path=IsOfHighPriority, Mode=OneWay,Converter={StaticResource PriorityToColorConverter}}"
+									FontSize="22"
+									FontFamily="Segoe UI"
+									FontWeight="{Binding Path=IsOfHighPriority, Mode=OneWay, Converter={StaticResource PriorityToFontWeightConverter}}"
 									TextWrapping="Wrap"
 									MaxLines="2"
-									Text="{Binding Path=Content, Mode=TwoWay}"/>
+									TextChanged="Pinned_TextChanged"
+									Text="{Binding Path=Content, Mode=OneWay}"/>
 							</Grid>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
@@ -440,7 +504,7 @@
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Grid 
-								Margin="20, 5, 30, 0" 
+								Margin="20, 0, 20, 5" 
 								HorizontalAlignment="Stretch"
 								MinHeight="40">
 								<Grid.Style>
@@ -448,7 +512,7 @@
 										<Setter Property="Background" Value="{StaticResource TransparentBackground}"/>
 										<Style.Triggers>
 											<Trigger Property="IsMouseOver" Value="True">
-												<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+												<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
 											</Trigger>
 										</Style.Triggers>
 									</Style>
@@ -476,6 +540,7 @@
 								</Grid.Resources>
 								<Button
 									Name="RemoveIcon"
+									Style="{StaticResource DefaultButton}"
 									Width="16" 
 									Height="16" 
 									HorizontalAlignment="Left" 
@@ -489,7 +554,7 @@
 										FontFamily="./Resources/#Segoe MDL2 Assets" 
 										Text="&#xE106;" 
 										FontSize="8" 
-										Foreground="{StaticResource LightForeground}"/>
+										Foreground="{DynamicResource Foreground}"/>
 								</Button>
 								<TextBox 
 									Style="{StaticResource Item}"
@@ -502,13 +567,15 @@
 									FontWeight="{Binding Path=IsOfHighPriority, Mode=OneWay, Converter={StaticResource PriorityToFontWeightConverter}}"
 									TextWrapping="Wrap"
 									MaxLines="2"
-									Text="{Binding Path=Content, Mode=TwoWay}"/>
-								<local:MyDatePicker			
+									TextChanged="Todo_TextChanged"
+									Text="{Binding Path=Content, Mode=OneWay}"/>
+								<local:MyDatePicker
 									HorizontalAlignment="Right"
 									VerticalAlignment="Top"
-									Margin="0, 5, 0, 0"
+									Margin="0, 5, 10, 0"
 									BorderThickness="0"
-									Width="60"/>
+									Width="60"
+									SelectedDateChanged="MyDatePicker_SelectedDateChanged"/>
 							</Grid>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
@@ -516,7 +583,7 @@
 			</StackPanel>
 		</ScrollViewer>
 		<Grid Margin="0, 5, 0, 0" MinHeight="58">
-			<Line X1="30" X2="390" Stroke="White"/>
+			<Line X1="30" X2="390" Stroke="{DynamicResource Foreground}"/>
 			<Grid
 				Margin="10,10,30,10">
 				<Grid 
@@ -586,11 +653,11 @@
 									<Setter Property="Background" Value="{StaticResource TransparentBackground}"/>
 									<Style.Triggers>
 										<Trigger Property="IsMouseCaptured" Value="True">
-											<Setter Property="BorderBrush" Value="{StaticResource LightForeground}"/>
-											<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+											<Setter Property="BorderBrush" Value="{DynamicResource Foreground}"/>
+											<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
 										</Trigger>
 										<Trigger Property="IsMouseOver" Value="True">
-											<Setter Property="Background" Value="{StaticResource HighlightBackground}"/>
+											<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
 											<Setter Property="BorderBrush" Value="{x:Null}"/>
 										</Trigger>
 									</Style.Triggers>
@@ -605,7 +672,8 @@
 							Margin="10,0,0,0" 
 							FontSize="20"
 							FontFamily="Segoe UI Light"
-							Foreground="{StaticResource HighlightBackground}">
+							Opacity="0.5"
+							Foreground="{DynamicResource Foreground}">
 							<TextBlock.Style>
 								<Style TargetType="{x:Type TextBlock}">
 									<Setter Property="Visibility" Value="Collapsed"/>
@@ -634,7 +702,7 @@
 						Width="60"
 						FontSize="30"
 						Opacity="0.5"
-						Foreground="{StaticResource LightForeground}"
+						Foreground="{DynamicResource Foreground}"
 						TextAlignment="Center"
 						FontFamily="Segoe UI Black"
 						Visibility="{Binding ElementName=Toggle, Path=IsChecked, Converter={StaticResource VisibilityConverter}}"/>

@@ -11,8 +11,8 @@
     <Setting Name="StartupLocation" Type="System.Drawing.Point" Scope="User">
       <Value Profile="(Default)">0, 0</Value>
     </Setting>
-    <Setting Name="IsLightTheme" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
+    <Setting Name="IsLight" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="Opacity" Type="System.Double" Scope="User">
       <Value Profile="(Default)">1</Value>
@@ -28,6 +28,12 @@
     </Setting>
     <Setting Name="HideFromTaskManager" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="Scale" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.75</Value>
+    </Setting>
+    <Setting Name="AdjustedMargin" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">-50, -80</Value>
     </Setting>
   </Settings>
 </SettingsFile>

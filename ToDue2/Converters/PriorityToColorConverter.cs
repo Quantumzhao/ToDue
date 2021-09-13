@@ -14,11 +14,11 @@ namespace ToDue2.Converters
 		{
 			if ((bool)(value ?? false))
 			{
-				return Application.Current.Resources["Alert"];
+				return Application.Current.MainWindow.Resources["Alert"];
 			}
 			else
 			{
-				return Application.Current.Resources["LightForeground"];
+				return App.Current.MainWindow.Resources["Foreground"];
 			}
 		}
 

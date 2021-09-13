@@ -61,13 +61,13 @@ namespace ToDue2.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IsLightTheme {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsLight {
             get {
-                return ((bool)(this["IsLightTheme"]));
+                return ((bool)(this["IsLight"]));
             }
             set {
-                this["IsLightTheme"] = value;
+                this["IsLight"] = value;
             }
         }
         
@@ -128,6 +128,30 @@ namespace ToDue2.Properties {
             }
             set {
                 this["HideFromTaskManager"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.75")]
+        public double Scale {
+            get {
+                return ((double)(this["Scale"]));
+            }
+            set {
+                this["Scale"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("-50, -80")]
+        public global::System.Drawing.Point AdjustedMargin {
+            get {
+                return ((global::System.Drawing.Point)(this["AdjustedMargin"]));
+            }
+            set {
+                this["AdjustedMargin"] = value;
             }
         }
     }

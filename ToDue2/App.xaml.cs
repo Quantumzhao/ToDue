@@ -20,9 +20,6 @@ namespace ToDue2
 	/// </summary>
 	public partial class App : Application
 	{
-        public EventWaitHandle ProgramStarted { get; set; }
-        private string appName;
-
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -30,8 +27,8 @@ namespace ToDue2
         protected override void OnStartup(StartupEventArgs e)
         {
             RenderOptions.ProcessRenderMode = RenderMode.SoftwareOnly;
-            appName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
-            ProgramStarted = new EventWaitHandle(false, EventResetMode.AutoReset, appName, out var createNew);
+            var appName = Path.GetFileNameWithoutExtension(Process.GetCurrentProcess().MainModule.FileName);
+            var programStarted = new EventWaitHandle(false, EventResetMode.AutoReset, appName, out var createNew);
             if (!createNew)
             {
                 Process current = Process.GetCurrentProcess();
@@ -45,7 +42,6 @@ namespace ToDue2
                         break;
                     }
                 }
-
             }
             else
             {
