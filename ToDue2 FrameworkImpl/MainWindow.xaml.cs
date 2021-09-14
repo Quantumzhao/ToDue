@@ -50,10 +50,9 @@ namespace ToDue2
 
 			InitializeComponent();
 			_Timer = new DispatcherTimer(DispatcherPriority.Background);
-			_Timer.Interval = TimeSpan.FromDays(1);
+			_Timer.Interval = TimeSpan.FromHours(6);
 			_Timer.Tick += (s, e) => Refresh();
 			_Timer.Start();
-
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -117,16 +116,18 @@ namespace ToDue2
 			this.Top = settings.StartupLocationY;
 			this.Opacity = settings.Opacity;
 
+			this.LocationChanged += (s, e1) => SaveWindowLocation(null, null);
+
 #if true
 			if (settings.TodoItems == string.Empty)
 			{
 				TodoItems = new ObservableSortedList();
 			}
 			else using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.TodoItems)))
-				{
-					BinaryFormatter bf = new BinaryFormatter();
-					TodoItems = new ObservableSortedList((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
-				}
+			{
+				BinaryFormatter bf = new BinaryFormatter();
+				TodoItems = new ObservableSortedList((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
+			}
 
 			if (settings.PinnedItems == string.Empty)
 			{
@@ -229,13 +230,14 @@ namespace ToDue2
 					window.WindowState = WindowState.Normal;
 					window.Topmost = true;
 					window.Topmost = false;
+					Win32.SetBottom(this);
 				});
 			});
 		}
 
 		private async void Window_StateChanged(object sender, EventArgs e)
 		{
-			await CancelShowDesktop(this);
+			//await CancelShowDesktop(this);
 		}
 
 		#endregion
@@ -248,7 +250,8 @@ namespace ToDue2
 
 		private void Refresh()
 		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
+			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
+			TodoItems.Refresh();
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayedDueDate)));
 		}
 
@@ -292,7 +295,7 @@ namespace ToDue2
 			catch { }
 		}
 
-		private void SaveWindowLocation(object sender, RoutedEventArgs e)
+		public void SaveWindowLocation(object sender, RoutedEventArgs e)
 		{
 			Settings.Default.StartupLocationX = (int)this.Left;
 			Settings.Default.StartupLocationY = (int)this.Top;
@@ -361,6 +364,11 @@ namespace ToDue2
 			MainPanel.Background = this.Resources["TransparentBackground"] as SolidColorBrush;
 			Settings.Default.ShowBackground = false;
 			Settings.Default.Save();
+		}
+
+		private void MainPanel_MouseUp(object sender, MouseButtonEventArgs e)
+		{
+			SaveWindowLocation(null, null);
 		}
 	}
 }

@@ -34,5 +34,10 @@ namespace ToDue2
 			CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
 				NotifyCollectionChangedAction.Remove, content));
 		}
+
+		public void Refresh()
+		{
+			CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+		}
 	}
 }

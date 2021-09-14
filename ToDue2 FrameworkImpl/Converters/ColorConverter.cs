@@ -15,15 +15,15 @@ namespace ToDue2.Converters
 			var diff = (DateTime)(value ?? DateTime.Now) - DateTime.Now;
 			if (diff >= TimeSpan.FromDays(7))
 			{
-				return Application.Current.MainWindow.Resources["OK"];
+				return Application.Current?.MainWindow?.Resources["OK"];
 			}
 			else if (diff >= TimeSpan.FromDays(1))
 			{
-				return Application.Current.MainWindow.Resources["Warning"];
+				return Application.Current?.MainWindow?.Resources["Warning"];
 			}
 			else
 			{
-				return Application.Current.MainWindow.Resources["Alert"];
+				return Application.Current?.MainWindow?.Resources["Alert"];
 			}
 		}
 

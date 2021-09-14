@@ -6,12 +6,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:local="clr-namespace:ToDue2"
 	xmlns:converters="clr-namespace:ToDue2.Converters"
-	xmlns:Settings="clr-namespace:ToDue2.Properties"
+	xmlns:p="clr-namespace:ToDue2.Properties"
 	xmlns:tb="http://www.hardcodet.net/taskbar"
 	xmlns:System="clr-namespace:System;assembly=mscorlib"
 	mc:Ignorable="d"
 	Title="ToDue 2" 
-	Height="633" 
+	MinHeight="633" 
 	MinWidth="420"
 	Width="420"
 	Background="Transparent"
@@ -300,8 +300,10 @@
 		x:Name="MainPanel" 
 		RenderTransformOrigin="0.5,0.5"
 		MouseDown="MainPanel_MouseDown"
+		MouseUp="MainPanel_MouseUp"
 		Background="{StaticResource TransparentBackground}"
-		Height="633" 
+		Height="Auto" 
+		MinHeight="633"
 		Width="420" 
 		HorizontalAlignment="Left" 
 		VerticalAlignment="Top"
@@ -398,7 +400,7 @@
 		<ScrollViewer 
 			VerticalScrollBarVisibility="Hidden" 
 			Background="{StaticResource TransparentBackground}"
-			MaxHeight="420">
+			MaxHeight="560">
 			<StackPanel>
 				<ItemsControl ItemsSource="{Binding ElementName=Window, Path=PinnedItems}">
 					<ItemsControl.ItemTemplate>
@@ -466,19 +468,36 @@
 										</Style>
 									</Button.Style>
 								</Button>
-								<TextBox 
-									Style="{StaticResource Item}"
-									Margin="24,5,74,5"
-									VerticalAlignment="Top"
-									BorderThickness="0, 0, 0, 1"
-									Foreground="{Binding Path=IsOfHighPriority, Mode=OneWay,Converter={StaticResource PriorityToColorConverter}}"
-									FontSize="22"
-									FontFamily="Segoe UI"
-									FontWeight="{Binding Path=IsOfHighPriority, Mode=OneWay, Converter={StaticResource PriorityToFontWeightConverter}}"
-									TextWrapping="Wrap"
-									MaxLines="2"
-									TextChanged="Pinned_TextChanged"
-									Text="{Binding Path=Content, Mode=OneWay}"/>
+								<StackPanel 
+									Orientation="Horizontal"
+									Margin="24,5,74,5">
+									<ToggleButton
+										Style="{StaticResource Priority}"
+										Width="28" 
+										Height="28"
+										Margin="0, 0, 10, 0"
+										HorizontalAlignment="Left" 
+										VerticalAlignment="Center"
+										IsChecked="{Binding Path=IsOfHighPriority, Mode=TwoWay}"
+										Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}, Converter={StaticResource VisibilityConverter}}">
+										<TextBlock
+											FontFamily="./Resources/#Segoe MDL2 Assets" 
+											Text="&#xE814;" 
+											FontSize="16"/>
+									</ToggleButton>
+									<TextBox 
+										Style="{StaticResource Item}"
+										VerticalAlignment="Top"
+										BorderThickness="0, 0, 0, 1"
+										Foreground="{Binding Path=IsOfHighPriority, Mode=OneWay,Converter={StaticResource PriorityToColorConverter}}"
+										FontSize="22"
+										FontFamily="Segoe UI"
+										FontWeight="{Binding Path=IsOfHighPriority, Mode=OneWay, Converter={StaticResource PriorityToFontWeightConverter}}"
+										TextWrapping="Wrap"
+										MaxLines="2"
+										TextChanged="Pinned_TextChanged"
+										Text="{Binding Path=Content, Mode=OneWay}"/>
+								</StackPanel>
 							</Grid>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
@@ -539,19 +558,36 @@
 										FontSize="8" 
 										Foreground="{DynamicResource Foreground}"/>
 								</Button>
-								<TextBox 
-									Style="{StaticResource Item}"
-									Margin="24,5,74,5"
-									VerticalAlignment="Top"
-									BorderThickness="0, 0, 0, 1"
-									Foreground="{Binding Path=IsOfHighPriority, Mode=OneWay,Converter={StaticResource PriorityToColorConverter}}"
-									FontSize="22"
-									FontFamily="Segoe UI"
-									FontWeight="{Binding Path=IsOfHighPriority, Mode=OneWay, Converter={StaticResource PriorityToFontWeightConverter}}"
-									TextWrapping="Wrap"
-									MaxLines="2"
-									TextChanged="Todo_TextChanged"
-									Text="{Binding Path=Content, Mode=OneWay}"/>
+								<StackPanel 
+									Orientation="Horizontal"
+									Margin="24,5,74,5">
+									<ToggleButton
+										Style="{StaticResource Priority}"
+										Width="28" 
+										Height="28"
+										Margin="0, 0, 10, 0"
+										HorizontalAlignment="Left" 
+										VerticalAlignment="Center"
+										IsChecked="{Binding Path=IsOfHighPriority, Mode=TwoWay}"
+										Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}, Converter={StaticResource VisibilityConverter}}">
+										<TextBlock
+											FontFamily="./Resources/#Segoe MDL2 Assets" 
+											Text="&#xE814;" 
+											FontSize="16"/>
+									</ToggleButton>
+									<TextBox 
+										Style="{StaticResource Item}"
+										VerticalAlignment="Top"
+										BorderThickness="0, 0, 0, 1"
+										Foreground="{Binding Path=IsOfHighPriority, Mode=OneWay,Converter={StaticResource PriorityToColorConverter}}"
+										FontSize="22"
+										FontFamily="Segoe UI"
+										FontWeight="{Binding Path=IsOfHighPriority, Mode=OneWay, Converter={StaticResource PriorityToFontWeightConverter}}"
+										TextWrapping="Wrap"
+										MaxLines="2"
+										TextChanged="Todo_TextChanged"
+										Text="{Binding Path=Content, Mode=OneWay}"/>
+								</StackPanel>
 								<local:MyDatePicker
 									HorizontalAlignment="Right"
 									VerticalAlignment="Top"
