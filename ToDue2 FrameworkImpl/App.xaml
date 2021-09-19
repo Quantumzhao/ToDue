@@ -28,6 +28,6 @@
 		<SolidColorBrush x:Key="LightPressedBackground" Color="#3FFFFFFF"/>
 		<SolidColorBrush x:Key="DarkPressedBackground" Color="#19000000"/>
 
-		<SolidColorBrush x:Key="InfoHighlight" Color="#FF2C6FC2"/>
+		<SolidColorBrush x:Key="InfoHighlight" Color="#FF649BDE"/>
 	</Application.Resources>
 </Application>

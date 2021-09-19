@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -27,10 +28,10 @@ namespace ToDue2
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window, INotifyPropertyChanged
+	public partial class MainWindow : Window, INotifyPropertyChanged, IDropTarget
 	{
-		public ObservableCollection<TodoItem> PinnedItems { get; private set; }
-		public ObservableSortedList TodoItems { get; private set; }
+		public ObservableTodoList PinnedItems { get; private set; }
+		public ObservableTodoList TodoItems { get; private set; }
 		private DispatcherTimer _Timer;
 
 		private DateTime _DisplayedDueDate = DateTime.Now;
@@ -121,29 +122,29 @@ namespace ToDue2
 #if true
 			if (settings.TodoItems == string.Empty)
 			{
-				TodoItems = new ObservableSortedList();
+				TodoItems = new ObservableTodoList();
 			}
 			else using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.TodoItems)))
 			{
 				BinaryFormatter bf = new BinaryFormatter();
-				TodoItems = new ObservableSortedList((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
+				TodoItems = new ObservableTodoList((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
 			}
 
 			if (settings.PinnedItems == string.Empty)
 			{
-				PinnedItems = new ObservableCollection<TodoItem>();
+				PinnedItems = new ObservableTodoList();
 			}
 			else using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.PinnedItems)))
 			{
 				BinaryFormatter bf = new BinaryFormatter();
-				PinnedItems = new ObservableCollection<TodoItem>((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
+				PinnedItems = new ObservableTodoList((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
 			}
 
 #else
 			TodoItems = new ObservableSortedList();
 			TodoItems.Add(new TodoItem(DateTime.Now, "Test", true));
 #endif
-			TodoItems.ForEach(todo => todo.PropertyChanged += (s, e4) => SaveTodoList());
+			foreach (var todo in TodoItems) todo.PropertyChanged += (s, e4) => SaveTodoList();
 			foreach (var pinned in PinnedItems) pinned.PropertyChanged += (s, e3) => SavePinnedList();
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PinnedItems)));
@@ -369,6 +370,16 @@ namespace ToDue2
 		private void MainPanel_MouseUp(object sender, MouseButtonEventArgs e)
 		{
 			SaveWindowLocation(null, null);
+		}
+
+		void IDropTarget.DragOver(IDropInfo dropInfo)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IDropTarget.Drop(IDropInfo dropInfo)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

@@ -21,9 +21,13 @@ namespace ToDue2.Converters
 			{
 				return Application.Current?.MainWindow?.Resources["Warning"];
 			}
-			else
+			else if (diff >= TimeSpan.FromDays(-7))
 			{
 				return Application.Current?.MainWindow?.Resources["Alert"];
+			}
+			else
+			{
+				return Application.Current?.MainWindow?.Resources["PressedBackground"];
 			}
 		}
 
