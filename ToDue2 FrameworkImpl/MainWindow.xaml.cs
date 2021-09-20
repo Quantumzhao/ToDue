@@ -28,10 +28,13 @@ namespace ToDue2
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window, INotifyPropertyChanged, IDropTarget
+	public partial class MainWindow : Window, INotifyPropertyChanged
 	{
-		public ObservableTodoList PinnedItems { get; private set; }
-		public ObservableTodoList TodoItems { get; private set; }
+		public DragAndDropHandler PinnedItemDragAndDropHandler { get; }
+		public DragAndDropHandler TodoItemDragAndDropHandler { get; }
+		public ObservableTodoList PinnedItems { get; set; }
+		public ObservableTodoList TodoItems { get; set; }
+		public MyDatePicker DueDateControl => DueDate;
 		private DispatcherTimer _Timer;
 
 		private DateTime _DisplayedDueDate = DateTime.Now;
@@ -48,6 +51,9 @@ namespace ToDue2
 		public MainWindow()
 		{
 			SetTheme(Settings.Default.IsLight);
+
+			PinnedItemDragAndDropHandler = new DragAndDropHandler(this);
+			TodoItemDragAndDropHandler = new DragAndDropHandler(this);
 
 			InitializeComponent();
 			_Timer = new DispatcherTimer(DispatcherPriority.Background);
@@ -125,10 +131,12 @@ namespace ToDue2
 				TodoItems = new ObservableTodoList();
 			}
 			else using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.TodoItems)))
-			{
-				BinaryFormatter bf = new BinaryFormatter();
-				TodoItems = new ObservableTodoList((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
-			}
+				{
+					BinaryFormatter bf = new BinaryFormatter();
+					TodoItems = new ObservableTodoList(
+						(bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s), 
+						Settings.Default.DoesReorderTodo);
+				}
 
 			if (settings.PinnedItems == string.Empty)
 			{
@@ -144,6 +152,8 @@ namespace ToDue2
 			TodoItems = new ObservableSortedList();
 			TodoItems.Add(new TodoItem(DateTime.Now, "Test", true));
 #endif
+			AutoReorder.IsChecked = Settings.Default.DoesReorderTodo;
+
 			foreach (var todo in TodoItems) todo.PropertyChanged += (s, e4) => SaveTodoList();
 			foreach (var pinned in PinnedItems) pinned.PropertyChanged += (s, e3) => SavePinnedList();
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
@@ -194,6 +204,34 @@ namespace ToDue2
 		{
 			var scale = double.Parse((sender as Control).Tag as string);
 			SetScaleAndMargin(scale);
+		}
+		private void AutoReorder_Checked(object sender, RoutedEventArgs e)
+		{
+			Settings.Default.DoesReorderTodo = true;
+			TodoItems.DoesAutoSort = true;
+			TodoItems.Reorder();
+			Settings.Default.Save();
+		}
+
+		private void AutoReorder_Unchecked(object sender, RoutedEventArgs e)
+		{
+			Settings.Default.DoesReorderTodo = false;
+			TodoItems.DoesAutoSort = false;
+			Settings.Default.Save();
+		}
+
+		private void ShowBackground_Checked(object sender, RoutedEventArgs e)
+		{
+			MainPanel.Background = App.Current.Resources["Background"] as SolidColorBrush;
+			Settings.Default.ShowBackground = true;
+			Settings.Default.Save();
+		}
+
+		private void ShowBackground_Unchecked(object sender, RoutedEventArgs e)
+		{
+			MainPanel.Background = App.Current.Resources["TransparentBackground"] as SolidColorBrush;
+			Settings.Default.ShowBackground = false;
+			Settings.Default.Save();
 		}
 		#endregion
 
@@ -308,8 +346,13 @@ namespace ToDue2
 			var date = (sender as MyDatePicker).SelectedDate;
 			var todo = (sender as MyDatePicker).DataContext as TodoItem;
 			todo.DueDate = date ?? DateTime.Now;
-			TodoItems.Remove(todo);
-			TodoItems.Add(todo);
+
+			if (Settings.Default.DoesReorderTodo)
+			{
+				TodoItems.Remove(todo);
+				TodoItems.Add(todo);
+			}
+
 			SaveTodoList();
 		}
 
@@ -333,38 +376,24 @@ namespace ToDue2
 		{
 			if (isLight)
 			{
-				this.Resources["Foreground"] = App.Current.Resources["LightForeground"];
-				this.Resources["Alert"] = App.Current.Resources["LightAlert"];
-				this.Resources["Warning"] = App.Current.Resources["LightWarning"];
-				this.Resources["OK"] = App.Current.Resources["LightOK"];
-				this.Resources["HighlightBackground"] = App.Current.Resources["LightHighlightBackground"];
-				this.Resources["PressedBackground"] = App.Current.Resources["LightPressedBackground"];
-				this.Resources["Background"] = App.Current.Resources["DarkBackground"];
+				App.Current.Resources["Foreground"] =			App.Current.Resources["LightForeground"];
+				App.Current.Resources["Alert"] =				App.Current.Resources["LightAlert"];
+				App.Current.Resources["Warning"] =				App.Current.Resources["LightWarning"];
+				App.Current.Resources["OK"] =					App.Current.Resources["LightOK"];
+				App.Current.Resources["HighlightBackground"] =	App.Current.Resources["LightHighlightBackground"];
+				App.Current.Resources["PressedBackground"] =	App.Current.Resources["LightPressedBackground"];
+				App.Current.Resources["Background"] =			App.Current.Resources["DarkBackground"];
 			}
 			else
 			{
-				this.Resources["Foreground"] = App.Current.Resources["DarkForeground"];
-				this.Resources["Alert"] = App.Current.Resources["DarkAlert"];
-				this.Resources["Warning"] = App.Current.Resources["DarkWarning"];
-				this.Resources["OK"] = App.Current.Resources["DarkOK"];
-				this.Resources["HighlightBackground"] = App.Current.Resources["DarkHighlightBackground"];
-				this.Resources["PressedBackground"] = App.Current.Resources["DarkPressedBackground"];
-				this.Resources["Background"] = App.Current.Resources["LightBackground"];
+				App.Current.Resources["Foreground"] =			App.Current.Resources["DarkForeground"];
+				App.Current.Resources["Alert"] =				App.Current.Resources["DarkAlert"];
+				App.Current.Resources["Warning"] =				App.Current.Resources["DarkWarning"];
+				App.Current.Resources["OK"] =					App.Current.Resources["DarkOK"];
+				App.Current.Resources["HighlightBackground"] =	App.Current.Resources["DarkHighlightBackground"];
+				App.Current.Resources["PressedBackground"] =	App.Current.Resources["DarkPressedBackground"];
+				App.Current.Resources["Background"] =			App.Current.Resources["LightBackground"];
 			}
-		}
-
-		private void ShowBackground_Checked(object sender, RoutedEventArgs e)
-		{
-			MainPanel.Background = this.Resources["Background"] as SolidColorBrush;
-			Settings.Default.ShowBackground = true;
-			Settings.Default.Save();
-		}
-
-		private void ShowBackground_Unchecked(object sender, RoutedEventArgs e)
-		{
-			MainPanel.Background = this.Resources["TransparentBackground"] as SolidColorBrush;
-			Settings.Default.ShowBackground = false;
-			Settings.Default.Save();
 		}
 
 		private void MainPanel_MouseUp(object sender, MouseButtonEventArgs e)
@@ -372,14 +401,13 @@ namespace ToDue2
 			SaveWindowLocation(null, null);
 		}
 
-		void IDropTarget.DragOver(IDropInfo dropInfo)
-		{
-			throw new NotImplementedException();
-		}
-
-		void IDropTarget.Drop(IDropInfo dropInfo)
-		{
-			throw new NotImplementedException();
-		}
+		public static MessageBoxResult ShowConfirmationMessage() => MessageBox.Show(
+			"The \"Auto reorder option\" is enabled which stops you from this operation" +
+			"\n Do you want to turn off this setting? " +
+			"\n This notification will not show up again. ",
+			"Info",
+			MessageBoxButton.YesNo,
+			MessageBoxImage.Information,
+			MessageBoxResult.Yes);
 	}
 }

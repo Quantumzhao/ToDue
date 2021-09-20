@@ -7,7 +7,7 @@
 		<SolidColorBrush x:Key="LightAlert" Color="#FFFFAEBB"/>
 		<SolidColorBrush x:Key="DarkAlert" Color="#FFBE6878"/>
 
-		<SolidColorBrush x:Key="RedAlert" Color="#FFFF4057"/>
+		<SolidColorBrush x:Key="RedAlert" Color="#FFE85F6F"/>
 
 		<SolidColorBrush x:Key="LightWarning" Color="#FFECF38D"/>
 		<SolidColorBrush x:Key="DarkWarning" Color="#FFBCC26B"/>

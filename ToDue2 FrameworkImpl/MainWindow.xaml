@@ -248,7 +248,7 @@
 								</ControlTemplate>
 							</Setter.Value>
 						</Setter>
-						<Setter Property="TextElement.Foreground" Value="{DynamicResource Alert}"/>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource RedAlert}"/>
 						<Setter Property="Opacity" Value="1"/>
 					</Trigger.Setters>
 				</Trigger>
@@ -269,7 +269,7 @@
 								</ControlTemplate>
 							</Setter.Value>
 						</Setter>
-						<Setter Property="TextElement.Foreground" Value="{DynamicResource Alert}"/>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource RedAlert}"/>
 						<Setter Property="Opacity" Value="1"/>
 					</Trigger.Setters>
 				</Trigger>
@@ -290,7 +290,82 @@
 								</ControlTemplate>
 							</Setter.Value>
 						</Setter>
-						<Setter Property="TextElement.Foreground" Value="{DynamicResource Alert}"/>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource RedAlert}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+			</Style.Triggers>
+		</Style>
+		<Style x:Key="PriorityMod" TargetType="ToggleButton">
+			<Style.Setters>
+				<Setter
+					Property="Background" 
+					Value="{StaticResource TransparentBackground}"/>
+				<Setter Property="BorderBrush" Value="{x:Null}"/>
+				<Setter Property="Opacity" Value="0.5"/>
+				<Setter Property="TextElement.Foreground" Value="{DynamicResource Foreground}"/>
+				<Setter Property="Template">
+					<Setter.Value>
+						<ControlTemplate TargetType="ToggleButton">
+							<Border 
+								Background="{StaticResource TransparentBackground}"
+								BorderBrush="{x:Null}"
+								CornerRadius="14">
+								<ContentPresenter 
+									HorizontalAlignment="Center" 
+									VerticalAlignment="Center">
+								</ContentPresenter>
+							</Border>
+						</ControlTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style.Setters>
+			<Style.Triggers>
+				<Trigger Property="IsMouseOver" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{DynamicResource HighlightBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource RedAlert}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsPressed" Value="True">
+					<Trigger.Setters>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="ToggleButton">
+									<Border 
+										Background="{DynamicResource PressedBackground}"
+										BorderBrush="{x:Null}"
+										CornerRadius="14">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource RedAlert}"/>
+						<Setter Property="Opacity" Value="1"/>
+					</Trigger.Setters>
+				</Trigger>
+				<Trigger Property="IsChecked" Value="True">
+					<Trigger.Setters>
+						<Setter Property="TextElement.Foreground" Value="{StaticResource RedAlert}"/>
 						<Setter Property="Opacity" Value="1"/>
 					</Trigger.Setters>
 				</Trigger>
@@ -350,6 +425,12 @@
 						<MenuItem 
 							Header="Refresh" 
 							Click="Refresh_Click"/>
+						<MenuItem
+							x:Name="AutoReorder"
+							Header="Automatically reorder todo"
+							IsCheckable="True"
+							Checked="AutoReorder_Checked"
+							Unchecked="AutoReorder_Unchecked"/>
 						<Separator/>
 					</MenuItem>
 					<Separator/>
@@ -425,14 +506,15 @@
 					</Style>
 				</StackPanel.Resources>
 				<ItemsControl 
-					ItemsSource="{Binding ElementName=Window, Path=PinnedItems}"
+					ItemsSource="{Binding ElementName=Window, Path=PinnedItems, Mode=TwoWay}"
 					dd:DragDrop.IsDragSource="True"
 					dd:DragDrop.IsDropTarget="True"
-					dd:DragDrop.DragHandler="{Binding}">
+					dd:DragDrop.DragHandler="{Binding ElementName=Window, Path=PinnedItemDragAndDropHandler}"
+					dd:DragDrop.DropHandler="{Binding ElementName=Window, Path=PinnedItemDragAndDropHandler}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Grid 
-								Margin="0, 0, 20, 0" 
+								Margin="0, 0, 0, 0" 
 								HorizontalAlignment="Stretch"
 								MinHeight="40">
 								<Grid.Style>
@@ -464,7 +546,7 @@
 																FontFamily="./Resources/#Segoe MDL2 Assets"
 																FontSize="16"
 																Foreground="{DynamicResource Alert}"
-																Text="&#xE196;"/>
+																Text="&#xE107;"/>
 														</Setter.Value>
 													</Setter>
 												</Trigger>
@@ -475,7 +557,7 @@
 																FontFamily="./Resources/#Segoe MDL2 Assets"
 																FontSize="16"
 																Foreground="{DynamicResource Alert}"
-																Text="&#xE196;"/>
+																Text="&#xE107;"/>
 														</Setter.Value>
 													</Setter>
 												</Trigger>
@@ -495,13 +577,13 @@
 									</Button.Style>
 								</Button>
 								<Grid
-									Margin="44, 5, 74, 5">
+									Margin="44, 5, 100, 5">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="Auto"/>
 										<ColumnDefinition Width="*"/>
 									</Grid.ColumnDefinitions>
 									<ToggleButton
-										Style="{StaticResource Priority}"
+										Style="{StaticResource PriorityMod}"
 										Grid.Column="0"
 										Width="28" 
 										Height="28"
@@ -531,21 +613,38 @@
 										Text="{Binding Path=Content, Mode=OneWay}"/>
 								</Grid>
 								<local:MyDatePicker
+									DataContext="{Binding}"
 									HorizontalAlignment="Right"
 									VerticalAlignment="Top"
-									Margin="0, 5, 10, 0"
+									Margin="0, 5, 30, 0"
 									BorderThickness="0"
 									Width="60"
 									SelectedDateChanged="MyDatePicker_SelectedDateChanged"/>
+								<TextBlock
+									Style="{StaticResource Body}"
+									HorizontalAlignment="Right"
+									VerticalAlignment="Top"
+									Margin="0, 12, 2, 0"
+									FontFamily="./Resources/#Segoe MDL2 Assets"
+									Text="&#xE784;"
+									Opacity="0.5"
+									Cursor="SizeNS"
+									Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}, Converter={StaticResource VisibilityConverter}}"/>
 							</Grid>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 				</ItemsControl>
-				<ItemsControl ItemsSource="{Binding ElementName=Window, Path=TodoItems}">
+				<ItemsControl 
+					ItemsSource="{Binding ElementName=Window, Path=TodoItems}"
+					dd:DragDrop.IsDragSource="True"
+					dd:DragDrop.IsDropTarget="True"
+					dd:DragDrop.DragHandler="{Binding ElementName=Window, Path=TodoItemDragAndDropHandler}"
+					dd:DragDrop.DropHandler="{Binding ElementName=Window, Path=TodoItemDragAndDropHandler}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
 							<Grid 
-								Margin="0, 0, 20, 5" 
+								Name="TodoGrid"
+								Margin="0, 0, 0, 5" 
 								HorizontalAlignment="Stretch"
 								MinHeight="40">
 								<Grid.Style>
@@ -561,11 +660,11 @@
 								<Button
 									Name="RemoveIcon"
 									Style="{StaticResource DefaultButton}"
-									Width="16" 
-									Height="16" 
+									Width="28" 
+									Height="28" 
 									HorizontalAlignment="Left" 
 									VerticalAlignment="Top" 
-									Margin="10, 13, 0, 0"
+									Margin="6, 6, 0, 0"
 									Background="{StaticResource TransparentBackground}" 
 									BorderBrush="{x:Null}"
 									Click="RemoveItem"
@@ -576,13 +675,13 @@
 										FontSize="10" 
 										Foreground="{DynamicResource Foreground}"/>
 								</Button>
-								<Grid Margin="44,5,74,5">
+								<Grid Margin="44,5,100,5">
 									<Grid.ColumnDefinitions>
 										<ColumnDefinition Width="Auto"/>
 										<ColumnDefinition Width="*"/>
 									</Grid.ColumnDefinitions>
 									<ToggleButton
-										Style="{StaticResource Priority}"
+										Style="{StaticResource PriorityMod}"
 										Grid.Column="0"
 										Width="28" 
 										Height="28"
@@ -612,19 +711,33 @@
 										Text="{Binding Path=Content, Mode=OneWay}"/>
 								</Grid>
 								<local:MyDatePicker
+									DataContext="{Binding}"
 									HorizontalAlignment="Right"
 									VerticalAlignment="Top"
-									Margin="0, 5, 10, 0"
+									Margin="0, 5, 30, 0"
 									BorderThickness="0"
 									Width="60"
 									SelectedDateChanged="MyDatePicker_SelectedDateChanged"/>
+								<TextBlock
+									Style="{StaticResource Body}"
+									HorizontalAlignment="Right"
+									VerticalAlignment="Top"
+									Margin="0, 12, 6, 0"
+									FontFamily="./Resources/#Segoe MDL2 Assets"
+									Text="&#xE784;"
+									Opacity="0.5"
+									Cursor="SizeNS"
+									Visibility="{Binding Path=IsMouseOver, RelativeSource={RelativeSource AncestorType=Grid}, Converter={StaticResource VisibilityConverter}}"/>
 							</Grid>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 				</ItemsControl>
 			</StackPanel>
 		</ScrollViewer>
-		<Grid Margin="0, 5, 0, 0" MinHeight="58">
+		<Grid 
+			Margin="0, 5, 0, 0" 
+			MinHeight="58"
+			AllowDrop="True">
 			<Line X1="30" X2="390" Stroke="{DynamicResource Foreground}"/>
 			<Grid
 				Margin="10,10,30,10">

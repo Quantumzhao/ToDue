@@ -22,18 +22,6 @@ namespace ToDue2
             Popup = Template.FindName("PART_Popup", this) as Popup;
             var textbox = Template.FindName("PART_TextBox", this) as TextBox;
             textbox.GotMouseCapture += (s, e) => Popup.IsOpen = true;
-            SelectedDateChanged += (s, e) =>
-			{
-                var todo = (Parent as Grid).DataContext as TodoItem;
-				if (todo == null)
-				{
-                    (App.Current.MainWindow as MainWindow).DisplayedDueDate = (DateTime)SelectedDate;
-				}
-				else
-				{
-                    todo.DueDate = (DateTime)SelectedDate;
-                }
-			};
         }
 	}
 }

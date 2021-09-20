@@ -154,5 +154,29 @@ namespace ToDue2.Properties {
                 this["ShowBackground"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DoesReorderTodo {
+            get {
+                return ((bool)(this["DoesReorderTodo"]));
+            }
+            set {
+                this["DoesReorderTodo"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool DoesShowPopup {
+            get {
+                return ((bool)(this["DoesShowPopup"]));
+            }
+            set {
+                this["DoesShowPopup"] = value;
+            }
+        }
     }
 }

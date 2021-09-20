@@ -90,6 +90,7 @@
     </ApplicationDefinition>
     <Compile Include="MyDatePicker.cs" />
     <Compile Include="ObservableSortedList.cs" />
+    <Compile Include="DragAndDropHandler.cs" />
     <Compile Include="Properties\Resources.en.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
