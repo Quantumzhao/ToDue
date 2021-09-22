@@ -89,36 +89,93 @@
 		</Button>
 		<Popup
 			x:Name="Container"
-			IsOpen="True" 
-			StaysOpen="False"
 			Placement="Bottom" 
-			PopupAnimation="Fade" 
-			AllowsTransparency="True" 
+			StaysOpen="False"
+			PopupAnimation="Fade"
 			VerticalAlignment="Bottom"
 			HorizontalAlignment="Center"
 			PlacementTarget="{Binding ElementName=Display}">
-			<Grid Height="Auto" Background="#FF000000">
-				<Border BorderBrush="{DynamicResource Foreground}"/>
-				<Calendar 
-					x:Name="Picker"
-					VerticalAlignment="Top" 
-					SelectedDate="{Binding ElementName=Control, Path=SelectedDate, Mode=TwoWay}"/>
-				<TextBlock 
-					Text="Or" 
-					Foreground="{DynamicResource Foreground}"
-					FontSize="16" Margin="10,174,0,0" HorizontalAlignment="Left" Width="Auto" Height="Auto" VerticalAlignment="Top"/>
-				<ToggleButton
-					Name="IndefiniteToggle"
-					Visibility="Visible" 
-					VerticalAlignment="Bottom"
-					Checked="IndefiniteToggle_Checked"
-					Unchecked="IndefiniteToggle_Unchecked" Margin="51,0,0,0">
+			<Border BorderBrush="{DynamicResource Foreground}" BorderThickness="1" Background="White">
+				<Grid Height="Auto">
+					<Calendar 
+						x:Name="Picker"
+						VerticalAlignment="Top" 
+						SelectedDate="{Binding ElementName=Control, Path=SelectedDate, Mode=TwoWay}"
+						BorderThickness="0"/>
 					<TextBlock 
-						Text="No Due Date" 
-						Foreground="{DynamicResource Foreground}"
-						FontSize="16"/>
-				</ToggleButton>
-			</Grid>
+						Text="Or" 
+						FontSize="16" 
+						Margin="18,160,0,10" 
+						HorizontalAlignment="Left" 
+						Width="Auto" 
+						Height="Auto" 
+						VerticalAlignment="Top"/>
+					<ToggleButton
+						Name="IndefiniteToggle"
+						Visibility="Visible" 
+						VerticalAlignment="Bottom"
+						Checked="IndefiniteToggle_Checked"
+						Unchecked="IndefiniteToggle_Unchecked" Height="24" Margin="51,0,8,8" Content="No Due Date" FontSize="16">
+						<ToggleButton.Style>
+							<Style TargetType="ToggleButton">
+								<Style.Triggers>
+									<Trigger Property="IsChecked" Value="True">
+										<Setter Property="Template">
+											<Setter.Value>
+												<ControlTemplate TargetType="ToggleButton">
+													<Border 
+														Background="{StaticResource InfoHighlight}"
+														BorderBrush="{x:Null}">
+														<ContentPresenter 
+															HorizontalAlignment="Center" 
+															VerticalAlignment="Center">
+														</ContentPresenter>
+													</Border>
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+										<Setter Property="Foreground" Value="White"/>
+									</Trigger>
+									<Trigger Property="IsChecked" Value="False">
+										<Setter Property="Template">
+											<Setter.Value>
+												<ControlTemplate TargetType="ToggleButton">
+													<Border 
+														Background="WhiteSmoke"
+														BorderBrush="{x:Null}">
+														<ContentPresenter 
+															HorizontalAlignment="Center" 
+															VerticalAlignment="Center">
+														</ContentPresenter>
+													</Border>
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+										<Setter Property="Foreground" Value="Black"/>
+									</Trigger>
+									<Trigger Property="IsMouseOver" Value="True">
+										<Setter Property="Template">
+											<Setter.Value>
+												<ControlTemplate TargetType="ToggleButton">
+													<Border 
+														Background="PowderBlue"
+														BorderBrush="{x:Null}">
+														<ContentPresenter 
+															HorizontalAlignment="Center" 
+															VerticalAlignment="Center">
+														</ContentPresenter>
+													</Border>
+												</ControlTemplate>
+											</Setter.Value>
+										</Setter>
+										<Setter Property="Foreground" Value="Black"/>
+									</Trigger>
+								</Style.Triggers>
+							</Style>
+						</ToggleButton.Style>
+					</ToggleButton>
+				</Grid>
+			</Border>
 		</Popup>
 	</Grid>
 </UserControl>
