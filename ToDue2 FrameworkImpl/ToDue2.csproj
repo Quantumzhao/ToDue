@@ -88,6 +88,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\NullityConverter.cs" />
+    <Compile Include="CustomDatePicker.xaml.cs">
+      <DependentUpon>CustomDatePicker.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MyDatePicker.cs" />
     <Compile Include="ObservableSortedList.cs" />
     <Compile Include="DragAndDropHandler.cs" />
@@ -104,6 +108,10 @@
     <Compile Include="Settings.cs" />
     <Compile Include="TodoItem.cs" />
     <Compile Include="Win32.cs" />
+    <Page Include="CustomDatePicker.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

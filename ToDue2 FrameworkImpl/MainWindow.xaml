@@ -544,9 +544,9 @@
 														<Setter.Value>
 															<TextBlock 
 																FontFamily="./Resources/#Segoe MDL2 Assets"
-																FontSize="16"
-																Foreground="{DynamicResource Alert}"
-																Text="&#xE107;"/>
+																FontSize="10"
+																Foreground="{DynamicResource Foreground}"
+																Text="&#xE106;"/>
 														</Setter.Value>
 													</Setter>
 												</Trigger>
@@ -556,8 +556,8 @@
 															<TextBlock 
 																FontFamily="./Resources/#Segoe MDL2 Assets"
 																FontSize="16"
-																Foreground="{DynamicResource Alert}"
-																Text="&#xE107;"/>
+																Foreground="{DynamicResource Foreground}"
+																Text="&#xE106;"/>
 														</Setter.Value>
 													</Setter>
 												</Trigger>
@@ -711,6 +711,7 @@
 										Text="{Binding Path=Content, Mode=OneWay}"/>
 								</Grid>
 								<local:MyDatePicker
+									Visibility="Collapsed"
 									DataContext="{Binding}"
 									HorizontalAlignment="Right"
 									VerticalAlignment="Top"
@@ -718,6 +719,12 @@
 									BorderThickness="0"
 									Width="60"
 									SelectedDateChanged="MyDatePicker_SelectedDateChanged"/>
+								<local:CustomDatePicker
+									HorizontalAlignment="Right"
+									VerticalAlignment="Top"
+									Margin="0, 5, 30, 0"
+									BorderThickness="0"
+									Width="60"/>
 								<TextBlock
 									Style="{StaticResource Body}"
 									HorizontalAlignment="Right"
@@ -843,24 +850,17 @@
 						</TextBlock>
 					</Grid>
 					<local:MyDatePicker	
+						Visibility="Collapsed"
 						x:Name="DueDate"
 						HorizontalAlignment="Right"
 						BorderThickness="0"
 						Width="60"
 						DataContext="{Binding ElementName=Window, Path=DisplayedDueDate, Mode=TwoWay}"
 						IsEnabled="{Binding ElementName=Toggle, Path=IsChecked, Converter={StaticResource NegateConverter}}"/>
-					<TextBlock
-						Text="∞" 
-						HorizontalAlignment="Right" 
-						VerticalAlignment="Top"
-						Margin="0, -9, 0, 0"
-						Width="60"
-						FontSize="30"
-						Opacity="0.5"
-						Foreground="{DynamicResource Foreground}"
-						TextAlignment="Center"
-						FontFamily="Segoe UI Black"
-						Visibility="{Binding ElementName=Toggle, Path=IsChecked, Converter={StaticResource VisibilityConverter}}"/>
+					<local:CustomDatePicker
+						HorizontalAlignment="Right"
+						BorderThickness="0"
+						Width="60"/>
 				</Grid>
 			</Grid>
 		</Grid>

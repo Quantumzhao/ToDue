@@ -1,0 +1,124 @@
+﻿ <UserControl x:Class="ToDue2.CustomDatePicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ToDue2"
+			xmlns:converters="clr-namespace:ToDue2.Converters"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+			 Name="Control">
+	<UserControl.Resources>
+		<converters:DateConverter x:Key="DateConverter"/>
+		<converters:ColorConverter x:Key="ColorConverter"/>
+		<converters:NullityConverter x:Key="NullityConverter"/>
+	</UserControl.Resources>
+    <Grid>
+		<Button x:Name="Display">
+			<Button.Style>
+				<Style TargetType="Button">
+					<Style.Setters>
+						<Setter 
+							Property="Background" 
+							Value="{StaticResource TransparentBackground}"/>
+						<Setter Property="BorderBrush" Value="{x:Null}"/>
+						<Setter Property="Template">
+							<Setter.Value>
+								<ControlTemplate TargetType="Button">
+									<Border 
+										Background="{StaticResource TransparentBackground}"
+										BorderBrush="{x:Null}">
+										<ContentPresenter 
+											HorizontalAlignment="Center" 
+											VerticalAlignment="Center">
+										</ContentPresenter>
+									</Border>
+								</ControlTemplate>
+							</Setter.Value>
+						</Setter>
+					</Style.Setters>
+					<Style.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Trigger.Setters>
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate TargetType="Button">
+											<Border 
+												Background="{DynamicResource HighlightBackground}"
+												BorderBrush="{x:Null}">
+												<ContentPresenter 
+													HorizontalAlignment="Center" 
+													VerticalAlignment="Center">
+												</ContentPresenter>
+											</Border>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Trigger.Setters>
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Trigger.Setters>
+								<Setter Property="Template">
+									<Setter.Value>
+										<ControlTemplate TargetType="Button">
+											<Border 
+												Background="{DynamicResource PressedBackground}"
+												BorderBrush="{x:Null}">
+												<ContentPresenter 
+													HorizontalAlignment="Center" 
+													VerticalAlignment="Center">
+												</ContentPresenter>
+											</Border>
+										</ControlTemplate>
+									</Setter.Value>
+								</Setter>
+							</Trigger.Setters>
+						</Trigger>
+					</Style.Triggers>
+				</Style>
+			</Button.Style>
+			<TextBlock 
+				Text="{Binding ElementName=Control, Path=SelectedDate, Mode=OneWay, Converter={StaticResource DateConverter}}"
+				FontSize="20"
+				FontFamily="Segoe UI Semibold"
+				Foreground="{Binding ElementName=Control, Path=SelectedDate, Mode=OneWay, Converter={StaticResource ColorConverter}}"
+				Background="{StaticResource TransparentBackground}"
+				HorizontalAlignment="Right"
+				VerticalAlignment="Stretch"
+				TextAlignment="Right"/>
+		</Button>
+		<Popup
+			x:Name="Container"
+			IsOpen="True" 
+			StaysOpen="False"
+			Placement="Bottom" 
+			PopupAnimation="Fade" 
+			AllowsTransparency="True" 
+			VerticalAlignment="Bottom"
+			HorizontalAlignment="Center"
+			PlacementTarget="{Binding ElementName=Display}">
+			<Grid Height="Auto" Background="#FF000000">
+				<Border BorderBrush="{DynamicResource Foreground}"/>
+				<Calendar 
+					x:Name="Picker"
+					VerticalAlignment="Top" 
+					SelectedDate="{Binding ElementName=Control, Path=SelectedDate, Mode=TwoWay}"/>
+				<TextBlock 
+					Text="Or" 
+					Foreground="{DynamicResource Foreground}"
+					FontSize="16" Margin="10,174,0,0" HorizontalAlignment="Left" Width="Auto" Height="Auto" VerticalAlignment="Top"/>
+				<ToggleButton
+					Name="IndefiniteToggle"
+					Visibility="Visible" 
+					VerticalAlignment="Bottom"
+					Checked="IndefiniteToggle_Checked"
+					Unchecked="IndefiniteToggle_Unchecked" Margin="51,0,0,0">
+					<TextBlock 
+						Text="No Due Date" 
+						Foreground="{DynamicResource Foreground}"
+						FontSize="16"/>
+				</ToggleButton>
+			</Grid>
+		</Popup>
+	</Grid>
+</UserControl>

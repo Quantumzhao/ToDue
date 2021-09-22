@@ -241,7 +241,7 @@ namespace ToDue2
 
 			if (!(Toggle.IsChecked ?? false))
 			{
-				var todo = new TodoItem(DueDate.SelectedDate ?? DateTime.Now, InputBox.Text, Priority.IsChecked ?? false);
+				var todo = new TodoItem(DueDate.SelectedDate ?? DateTime.MinValue, InputBox.Text, Priority.IsChecked ?? false);
 				todo.PropertyChanged += (s, e2) => SaveTodoList();
 				TodoItems.Add(todo);
 				SaveTodoList();
