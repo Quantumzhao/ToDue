@@ -11,7 +11,7 @@ namespace ToDue2.Converters
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			var date = (DateTime)(value ?? DateTime.MinValue);
-			if (date >= DateTime.Now.Subtract(TimeSpan.FromDays(7))) return $"{date.Month:00}/{date.Day:00}";
+			if (App.IsValidDate(date)) return $"{date.Month:00}/{date.Day:00}";
 			else return "None";
 		}
 

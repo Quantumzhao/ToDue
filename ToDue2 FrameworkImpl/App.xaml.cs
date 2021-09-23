@@ -68,5 +68,10 @@ namespace ToDue2
 				File.Delete(path);
 			}
 		}
+
+		public static bool IsValidDate(DateTime? date)
+		{
+			return date != null && date >= DateTime.Now.Subtract(TimeSpan.FromDays(7));
+		}
 	}
 }

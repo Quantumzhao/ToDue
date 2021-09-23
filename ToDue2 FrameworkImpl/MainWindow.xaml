@@ -612,14 +612,14 @@
 										TextChanged="Pinned_TextChanged"
 										Text="{Binding Path=Content, Mode=OneWay}"/>
 								</Grid>
-								<local:MyDatePicker
-									DataContext="{Binding}"
+								<local:CustomDatePicker
+									SelectedDate="{Binding Path=DueDate, Mode=OneWay}"
 									HorizontalAlignment="Right"
 									VerticalAlignment="Top"
 									Margin="0, 5, 30, 0"
 									BorderThickness="0"
 									Width="60"
-									SelectedDateChanged="MyDatePicker_SelectedDateChanged"/>
+									SelectedDateChanged="CustomDatePicker_SelectedDateChanged"/>
 								<TextBlock
 									Style="{StaticResource Body}"
 									HorizontalAlignment="Right"
@@ -710,21 +710,14 @@
 										TextChanged="Todo_TextChanged"
 										Text="{Binding Path=Content, Mode=OneWay}"/>
 								</Grid>
-								<local:MyDatePicker
-									Visibility="Collapsed"
-									DataContext="{Binding}"
-									HorizontalAlignment="Right"
-									VerticalAlignment="Top"
-									Margin="0, 5, 30, 0"
-									BorderThickness="0"
-									Width="60"
-									SelectedDateChanged="MyDatePicker_SelectedDateChanged"/>
 								<local:CustomDatePicker
 									HorizontalAlignment="Right"
 									VerticalAlignment="Top"
 									Margin="0, 5, 30, 0"
 									BorderThickness="0"
-									Width="60"/>
+									Width="60"
+									SelectedDate="{Binding Path=DueDate, Mode=OneWay}"
+									SelectedDateChanged="CustomDatePicker_SelectedDateChanged"/>
 								<TextBlock
 									Style="{StaticResource Body}"
 									HorizontalAlignment="Right"
@@ -849,18 +842,13 @@
 							</TextBlock.Style>
 						</TextBlock>
 					</Grid>
-					<local:MyDatePicker	
-						Visibility="Collapsed"
+					<local:CustomDatePicker
 						x:Name="DueDate"
 						HorizontalAlignment="Right"
 						BorderThickness="0"
 						Width="60"
-						DataContext="{Binding ElementName=Window, Path=DisplayedDueDate, Mode=TwoWay}"
-						IsEnabled="{Binding ElementName=Toggle, Path=IsChecked, Converter={StaticResource NegateConverter}}"/>
-					<local:CustomDatePicker
-						HorizontalAlignment="Right"
-						BorderThickness="0"
-						Width="60"/>
+						SelectedDate="{Binding ElementName=Window, Path=DisplayedDueDate, Mode=OneWay}"
+						SelectedDateChanged="DueDate_SelectedDateChanged"/>
 				</Grid>
 			</Grid>
 		</Grid>

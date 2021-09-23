@@ -41,12 +41,13 @@ namespace ToDue2
 			get => (DateTime?)GetValue(SelectedDateProperty);
 			set
 			{
-				if (value < DateTime.Now.Subtract(TimeSpan.FromDays(7)))
+				if (!App.IsValidDate(value))
 				{
 					value = null;
 				}
 
 				SetValue(SelectedDateProperty, value);
+				RaiseEvent(new UselessRoutedEventArgs(SelectedDateChangedEvent, this));
 
 				if (value != null)
 				{
@@ -58,6 +59,16 @@ namespace ToDue2
 					IndefiniteToggle.IsChecked = true;
 				}
 			}
+		}
+
+		public static readonly RoutedEvent SelectedDateChangedEvent = EventManager.RegisterRoutedEvent(
+		"SelectedDateChanged", RoutingStrategy.Bubble, typeof(EventHandler<UselessRoutedEventArgs>), typeof(CustomDatePicker));
+
+		// Provide CLR accessors for the event
+		public event RoutedEventHandler SelectedDateChanged
+		{
+			add { AddHandler(SelectedDateChangedEvent, value); }
+			remove { RemoveHandler(SelectedDateChangedEvent, value); }
 		}
 
 		public DateTime _LastNonNullValue = DateTime.Now;
@@ -73,5 +84,15 @@ namespace ToDue2
 			SelectedDate = _LastNonNullValue;
 			Container.IsOpen = false;
 		}
+
+		private void Control_Loaded(object sender, RoutedEventArgs e)
+		{
+			//if (!App.IsValidDate(SelectedDate)) IndefiniteToggle.IsChecked = true;
+		}
+	}
+
+	public class UselessRoutedEventArgs : RoutedEventArgs
+	{
+		public UselessRoutedEventArgs(RoutedEvent routedEvent, object source) : base(routedEvent, source) { }
 	}
 }

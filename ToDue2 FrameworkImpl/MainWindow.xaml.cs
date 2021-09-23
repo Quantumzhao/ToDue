@@ -34,7 +34,6 @@ namespace ToDue2
 		public DragAndDropHandler TodoItemDragAndDropHandler { get; }
 		public ObservableTodoList PinnedItems { get; set; }
 		public ObservableTodoList TodoItems { get; set; }
-		public MyDatePicker DueDateControl => DueDate;
 		private DispatcherTimer _Timer;
 
 		private DateTime _DisplayedDueDate = DateTime.Now;
@@ -409,5 +408,26 @@ namespace ToDue2
 			MessageBoxButton.YesNo,
 			MessageBoxImage.Information,
 			MessageBoxResult.Yes);
+
+		private void CustomDatePicker_SelectedDateChanged(object sender, UselessRoutedEventArgs e)
+		{
+			var date = (sender as CustomDatePicker).SelectedDate;
+			var todo = (sender as CustomDatePicker).DataContext as TodoItem;
+			todo.DueDate = date ?? DateTime.MinValue;
+
+			if (Settings.Default.DoesReorderTodo && TodoItems.Contains(todo))
+			{
+				TodoItems.Remove(todo);
+				TodoItems.Add(todo);
+			}
+
+			SaveTodoList();
+		}
+
+		private void DueDate_SelectedDateChanged(object sender, UselessRoutedEventArgs e)
+		{
+			DisplayedDueDate = DueDate.SelectedDate ?? DateTime.MinValue;
+		}
 	}
 }
+

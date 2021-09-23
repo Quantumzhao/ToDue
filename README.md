@@ -8,9 +8,11 @@ Originally I planned to implement it as a *Rainmeter* widget, but failed for all
 
 ## What are the unique features?
 
-- It is simple and concise, more of a resemblance of the classical sticky-note-on-monitor
-- It pins on desktop just like a *Windows 7* gadget. Great for reminding people (especially me) that they have works to do
-- It also shows the due dates
+- [x] It is simple and concise, more of a resemblance of the classical sticky-note-on-monitor solution
+- [x] It pins on desktop just like a *Windows 7* gadget. Great for reminding people (especially me) that they have works to do, but without the hassle of constantly buying sticky notes and make the monitor look messy
+- [x] It also shows the due dates, color coded in a helpful way
+- [x] You can pin items and reorganize them with total freedom (given that the "auto reordering" option is turned off)
+- [x] You can highlight the even more important todo items
 
 ## Screenshots
 
@@ -20,19 +22,14 @@ Originally I planned to implement it as a *Rainmeter* widget, but failed for all
 
 ### Actual:
 
-<img src="C:\Users\yisha\source\repos\ToDue\new.png" alt="new" style="zoom:33%;" />
-
-### Actual (Legacy):
-
-<img src="actual.jpg" alt="actual" style="zoom:50%;" />
+<img src=".\new.png" alt="new" style="zoom:67%;" />
 
 ## Other
 
-- Create a shortcut in `Startup` folder to make it automatically start on *Windows* start. 
-
+- It automatically create a shortcut in `Startup` folder to make it automatically start on *Windows* start. You can always disable it in the task manager. 
+- It is intentionally hidden from the "Application" category in the task manager, so that <kbd>Win</kbd> + <kbd>Tab</kbd> won't show it
 - The font `segmdl2` is copyrighted by *Microsoft*
-
-- The font `CONSERVATIVE SIMPLICITY` is created by myself. It is not allowed for commercial purposes. For more copyright info, please visit my *Behance* page
+- The font `CONSERVATIVE SIMPLICITY` is created by myself. It is not allowed for commercial purposes. For more copyright info, please visit my [*Behance* page](https://www.behance.net/gallery/49352569/Font-Design-Conservative-Simplicity)
 
 ---
 
@@ -64,9 +61,9 @@ Originally I planned to implement it as a *Rainmeter* widget, but failed for all
 - [x] Separator
 - [x] Draggable interface
 - [x] Keep on desktop
-- [ ] Show in notification area
+- [x] Show in notification area
     - [x] Setting transparency
-    - [ ] Switching between light/dark mode
+    - [x] Switching between light/dark mode
     - [x] Exit
     - [x] Reset position
 - [x] An icon
