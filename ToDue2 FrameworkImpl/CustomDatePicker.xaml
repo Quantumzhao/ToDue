@@ -12,23 +12,18 @@
 	<UserControl.Resources>
 		<converters:DateConverter x:Key="DateConverter"/>
 		<converters:ColorConverter x:Key="ColorConverter"/>
-		<converters:NullityConverter x:Key="NullityConverter"/>
 	</UserControl.Resources>
     <Grid>
-		<Button x:Name="Display">
+		<Button x:Name="Display" Background="{StaticResource TransparentBackground}">
 			<Button.Style>
 				<Style TargetType="Button">
 					<Style.Setters>
-						<Setter 
-							Property="Background" 
-							Value="{StaticResource TransparentBackground}"/>
-						<Setter Property="BorderBrush" Value="{x:Null}"/>
 						<Setter Property="Template">
 							<Setter.Value>
 								<ControlTemplate TargetType="Button">
 									<Border 
 										Background="{StaticResource TransparentBackground}"
-										BorderBrush="{x:Null}">
+										BorderBrush="Transparent">
 										<ContentPresenter 
 											HorizontalAlignment="Center" 
 											VerticalAlignment="Center">
@@ -46,7 +41,7 @@
 										<ControlTemplate TargetType="Button">
 											<Border 
 												Background="{DynamicResource HighlightBackground}"
-												BorderBrush="{x:Null}">
+												BorderBrush="Transparent">
 												<ContentPresenter 
 													HorizontalAlignment="Center" 
 													VerticalAlignment="Center">
@@ -64,7 +59,7 @@
 										<ControlTemplate TargetType="Button">
 											<Border 
 												Background="{DynamicResource PressedBackground}"
-												BorderBrush="{x:Null}">
+												BorderBrush="Transparent">
 												<ContentPresenter 
 													HorizontalAlignment="Center" 
 													VerticalAlignment="Center">

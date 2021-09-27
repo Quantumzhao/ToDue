@@ -63,9 +63,13 @@ namespace ToDue2
 					_Window.TodoItems.Reorder();
 				}
 			}
+			else
+			{
+				_Window.TodoItems.Refresh();
+			}
 
 			_Window.PinnedItems.Refresh();
-			_Window.TodoItems.Refresh();
+
 			_Window.SavePinnedList();
 			_Window.SaveTodoList();
 		}

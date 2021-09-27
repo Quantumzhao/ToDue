@@ -27,7 +27,16 @@ namespace ToDue2
 			Display.Click += (s, e) => Container.IsOpen = true;
 			Picker.SelectedDatesChanged += (s, e) =>
 			{
-				SelectedDate = Picker.SelectedDate;
+				IndefiniteToggle.IsChecked = !App.IsValidDate(Picker.SelectedDate);
+				if (SelectedDate != DateTime.MinValue)
+				{
+					_LastNonNullValue = (DateTime)SelectedDate;
+					IndefiniteToggle.IsChecked = false;
+				}
+				else
+				{
+					IndefiniteToggle.IsChecked = true;
+				}
 				Container.IsOpen = false;
 			};
 		}
@@ -41,15 +50,17 @@ namespace ToDue2
 			get => (DateTime?)GetValue(SelectedDateProperty);
 			set
 			{
+				if (value == SelectedDate) return;
+
 				if (!App.IsValidDate(value))
 				{
-					value = null;
+					value = DateTime.MinValue;
 				}
 
 				SetValue(SelectedDateProperty, value);
 				RaiseEvent(new UselessRoutedEventArgs(SelectedDateChangedEvent, this));
 
-				if (value != null)
+				if (value != DateTime.MinValue)
 				{
 					_LastNonNullValue = (DateTime)value;
 					IndefiniteToggle.IsChecked = false;
@@ -75,13 +86,18 @@ namespace ToDue2
 
 		private void IndefiniteToggle_Checked(object sender, RoutedEventArgs e)
 		{
-			SelectedDate = null;
+			if (SelectedDate != DateTime.MinValue)
+			{
+				_LastNonNullValue = (DateTime)SelectedDate;
+				SelectedDate = DateTime.MinValue;
+			}
+
 			Container.IsOpen = false;
 		}
 
 		private void IndefiniteToggle_Unchecked(object sender, RoutedEventArgs e)
 		{
-			SelectedDate = _LastNonNullValue;
+			if (!App.IsValidDate(SelectedDate)) SelectedDate = _LastNonNullValue;
 			Container.IsOpen = false;
 		}
 

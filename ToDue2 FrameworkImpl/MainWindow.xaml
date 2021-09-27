@@ -18,7 +18,6 @@
 	Background="Transparent"
 	StateChanged="Window_StateChanged" 
 	Loaded="Window_Loaded"
-	Unloaded="SaveWindowLocation"
 	WindowStyle="None" 
 	AllowsTransparency="True" 
 	Left="10" 
@@ -102,20 +101,6 @@
 					Value="{StaticResource TransparentBackground}"/>
 				<Setter Property="BorderBrush" Value="{x:Null}"/>
 			</Style.Setters>
-		</Style>
-		<Style TargetType="local:MyDatePicker">
-			<Style.Triggers>
-				<Trigger Property="IsMouseOver" Value="True">
-					<Trigger.Setters>
-						<Setter Property="Background" Value="{DynamicResource HighlightBackground}"/>
-					</Trigger.Setters>
-				</Trigger>
-				<Trigger Property="IsEnabled" Value="False">
-					<Trigger.Setters>
-						<Setter Property="Button.Visibility" Value="Collapsed"/>
-					</Trigger.Setters>
-				</Trigger>
-			</Style.Triggers>
 		</Style>
 		<Style x:Key="Title" TargetType="TextBlock">
 			<Style.Setters>
@@ -376,7 +361,6 @@
 		x:Name="MainPanel" 
 		RenderTransformOrigin="0.5,0.5"
 		MouseDown="MainPanel_MouseDown"
-		MouseUp="MainPanel_MouseUp"
 		Background="{StaticResource TransparentBackground}"
 		Height="Auto" 
 		MinHeight="633"
@@ -610,7 +594,7 @@
 										TextWrapping="Wrap"
 										MaxLines="2"
 										TextChanged="Pinned_TextChanged"
-										Text="{Binding Path=Content, Mode=OneWay}"/>
+										Text="{Binding Path=Content, Mode=TwoWay}"/>
 								</Grid>
 								<local:CustomDatePicker
 									SelectedDate="{Binding Path=DueDate, Mode=OneWay}"
@@ -708,7 +692,7 @@
 										TextWrapping="Wrap"
 										MaxLines="2"
 										TextChanged="Todo_TextChanged"
-										Text="{Binding Path=Content, Mode=OneWay}"/>
+										Text="{Binding Path=Content, Mode=TwoWay}"/>
 								</Grid>
 								<local:CustomDatePicker
 									HorizontalAlignment="Right"
@@ -716,7 +700,7 @@
 									Margin="0, 5, 30, 0"
 									BorderThickness="0"
 									Width="60"
-									SelectedDate="{Binding Path=DueDate, Mode=OneWay}"
+									SelectedDate="{Binding Path=DueDate, Mode=TwoWay}"
 									SelectedDateChanged="CustomDatePicker_SelectedDateChanged"/>
 								<TextBlock
 									Style="{StaticResource Body}"

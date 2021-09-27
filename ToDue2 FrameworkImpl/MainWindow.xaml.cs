@@ -122,20 +122,19 @@ namespace ToDue2
 			this.Top = settings.StartupLocationY;
 			this.Opacity = settings.Opacity;
 
-			this.LocationChanged += (s, e1) => SaveWindowLocation(null, null);
+			this.LocationChanged += (s, e1) => SaveWindowLocation();
 
-#if true
 			if (settings.TodoItems == string.Empty)
 			{
 				TodoItems = new ObservableTodoList();
 			}
 			else using (MemoryStream ms = new MemoryStream(Convert.FromBase64String(Settings.Default.TodoItems)))
-				{
-					BinaryFormatter bf = new BinaryFormatter();
-					TodoItems = new ObservableTodoList(
-						(bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s), 
-						Settings.Default.DoesReorderTodo);
-				}
+			{
+				BinaryFormatter bf = new BinaryFormatter();
+				TodoItems = new ObservableTodoList(
+					(bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s), 
+					Settings.Default.DoesReorderTodo);
+			}
 
 			if (settings.PinnedItems == string.Empty)
 			{
@@ -147,13 +146,14 @@ namespace ToDue2
 				PinnedItems = new ObservableTodoList((bf.Deserialize(ms) as TodoStruct[]).Select(s => (TodoItem)s));
 			}
 
-#else
-			TodoItems = new ObservableSortedList();
-			TodoItems.Add(new TodoItem(DateTime.Now, "Test", true));
-#endif
 			AutoReorder.IsChecked = Settings.Default.DoesReorderTodo;
 
-			foreach (var todo in TodoItems) todo.PropertyChanged += (s, e4) => SaveTodoList();
+			foreach (var todo in TodoItems) todo.PropertyChanged += (s, e4) =>
+			{
+				SaveTodoList();
+				if (e4.PropertyName == nameof(TodoItem.DueDate) && settings.DoesReorderTodo) TodoItems.Reorder();
+			};
+			TodoItems.CollectionChanged += (s, e5) => SaveTodoList();
 			foreach (var pinned in PinnedItems) pinned.PropertyChanged += (s, e3) => SavePinnedList();
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(PinnedItems)));
@@ -162,7 +162,6 @@ namespace ToDue2
 		#region MenuItem Actions
 		private void Exit_Click(object sender, RoutedEventArgs e)
 		{
-			SaveWindowLocation(null, null);
 			this.Close();
 		}
 
@@ -238,20 +237,33 @@ namespace ToDue2
 		{
 			if (e.Key != Key.Enter || InputBox.Text == string.Empty) return;
 
+			TodoItem newEntry;
+
 			if (!(Toggle.IsChecked ?? false))
 			{
-				var todo = new TodoItem(DueDate.SelectedDate ?? DateTime.MinValue, InputBox.Text, Priority.IsChecked ?? false);
-				todo.PropertyChanged += (s, e2) => SaveTodoList();
-				TodoItems.Add(todo);
+				newEntry = new TodoItem(DueDate.SelectedDate ?? DateTime.MinValue, InputBox.Text, Priority.IsChecked ?? false);
+				newEntry.PropertyChanged += (s, e3) =>
+				{
+					if (e3.PropertyName == nameof(TodoItem.DueDate) 
+						&& Settings.Default.DoesReorderTodo) 
+						TodoItems.Reorder();
+				};
+
+				TodoItems.Add(newEntry);
 				SaveTodoList();
 			}
 			else
 			{
-				var pinned = new TodoItem(DateTime.MinValue, InputBox.Text, Priority.IsChecked ?? false);
-				pinned.PropertyChanged += (s, e1) => SavePinnedList();
-				PinnedItems.Add(pinned);
+				newEntry = new TodoItem(DateTime.MinValue, InputBox.Text, Priority.IsChecked ?? false);
+				PinnedItems.Add(newEntry);
 				SavePinnedList();
 			}
+
+			newEntry.PropertyChanged += (s, e2) =>
+			{
+				SaveTodoList();
+				SavePinnedList();
+			};
 
 			InputBox.Text = string.Empty;
 			DueDate.SelectedDate = DateTime.Now;
@@ -333,42 +345,42 @@ namespace ToDue2
 			catch { }
 		}
 
-		public void SaveWindowLocation(object sender, RoutedEventArgs e)
+		public void SaveWindowLocation()
 		{
 			Settings.Default.StartupLocationX = (int)this.Left;
 			Settings.Default.StartupLocationY = (int)this.Top;
 			Settings.Default.Save();
 		}
 
-		private void MyDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-		{
-			var date = (sender as MyDatePicker).SelectedDate;
-			var todo = (sender as MyDatePicker).DataContext as TodoItem;
-			todo.DueDate = date ?? DateTime.Now;
+		//private void MyDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+		//{
+		//	var date = (sender as MyDatePicker).SelectedDate;
+		//	var todo = (sender as MyDatePicker).DataContext as TodoItem;
+		//	todo.DueDate = date ?? DateTime.Now;
 
-			if (Settings.Default.DoesReorderTodo)
-			{
-				TodoItems.Remove(todo);
-				TodoItems.Add(todo);
-			}
+		//	if (Settings.Default.DoesReorderTodo)
+		//	{
+		//		TodoItems.Remove(todo);
+		//		TodoItems.Add(todo);
+		//	}
 
-			SaveTodoList();
-		}
+		//	SaveTodoList();
+		//}
 
 		private void Todo_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			var text = (sender as TextBox).Text;
-			var todoItem = (sender as TextBox).DataContext as TodoItem;
-			todoItem.Content = text;
-			SaveTodoList();
+			//var text = (sender as TextBox).Text;
+			//var todoItem = (sender as TextBox).DataContext as TodoItem;
+			//todoItem.Content = text;
+			//SaveTodoList();
 		}
 
 		private void Pinned_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			var text = (sender as TextBox).Text;
-			var todoItem = (sender as TextBox).DataContext as TodoItem;
-			todoItem.Content = text;
-			SavePinnedList();
+			//var text = (sender as TextBox).Text;
+			//var todoItem = (sender as TextBox).DataContext as TodoItem;
+			//todoItem.Content = text;
+			//SavePinnedList();
 		}
 
 		private void SetTheme(bool isLight)
@@ -395,11 +407,6 @@ namespace ToDue2
 			}
 		}
 
-		private void MainPanel_MouseUp(object sender, MouseButtonEventArgs e)
-		{
-			SaveWindowLocation(null, null);
-		}
-
 		public static MessageBoxResult ShowConfirmationMessage() => MessageBox.Show(
 			"The \"Auto reorder option\" is enabled which stops you from this operation" +
 			"\n Do you want to turn off this setting? " +
@@ -411,17 +418,16 @@ namespace ToDue2
 
 		private void CustomDatePicker_SelectedDateChanged(object sender, UselessRoutedEventArgs e)
 		{
-			var date = (sender as CustomDatePicker).SelectedDate;
-			var todo = (sender as CustomDatePicker).DataContext as TodoItem;
-			todo.DueDate = date ?? DateTime.MinValue;
+			//var date = (sender as CustomDatePicker).SelectedDate;
+			//var todo = (sender as CustomDatePicker).DataContext as TodoItem;
+			//todo.DueDate = date ?? DateTime.MinValue;
 
-			if (Settings.Default.DoesReorderTodo && TodoItems.Contains(todo))
-			{
-				TodoItems.Remove(todo);
-				TodoItems.Add(todo);
-			}
+			//if (Settings.Default.DoesReorderTodo && TodoItems.Contains(todo))
+			//{
+			//	TodoItems.Reorder();
+			//}
 
-			SaveTodoList();
+			//SaveTodoList();
 		}
 
 		private void DueDate_SelectedDateChanged(object sender, UselessRoutedEventArgs e)
