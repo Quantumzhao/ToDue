@@ -16,11 +16,9 @@ Originally I planned to implement it as a *Rainmeter* widget, but failed for all
 
 ## Screenshots
 
-### Initial design
+<img src="new2.png" alt="design"/>
 
-<img src="design.jpg" alt="design" style="zoom:50%;" />
 
-### Actual:
 
 <img src=".\new.png" alt="new" style="zoom:67%;" />
 
