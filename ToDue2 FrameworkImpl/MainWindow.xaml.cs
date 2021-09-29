@@ -49,7 +49,7 @@ namespace ToDue2
 
 		public MainWindow()
 		{
-			SetTheme(Settings.Default.IsLight);
+			SetTheme(Settings.Default.IsLight, Settings.Default.IsHighContrast);
 
 			PinnedItemDragAndDropHandler = new DragAndDropHandler(this);
 			TodoItemDragAndDropHandler = new DragAndDropHandler(this);
@@ -103,6 +103,8 @@ namespace ToDue2
 			(App.Current as App).TryAddToStartupLocation();
 
 			Dark.IsChecked = !Settings.Default.IsLight;
+			HighContrast.IsChecked = Settings.Default.IsHighContrast;
+			Monochrome.IsChecked = !Settings.Default.IsHighContrast;
 
 			if (Settings.Default.ShowBackground)
 			{
@@ -300,7 +302,6 @@ namespace ToDue2
 
 		private void Refresh()
 		{
-			//PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(TodoItems)));
 			TodoItems.Refresh();
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(DisplayedDueDate)));
 		}
@@ -352,45 +353,28 @@ namespace ToDue2
 			Settings.Default.Save();
 		}
 
-		//private void MyDatePicker_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-		//{
-		//	var date = (sender as MyDatePicker).SelectedDate;
-		//	var todo = (sender as MyDatePicker).DataContext as TodoItem;
-		//	todo.DueDate = date ?? DateTime.Now;
-
-		//	if (Settings.Default.DoesReorderTodo)
-		//	{
-		//		TodoItems.Remove(todo);
-		//		TodoItems.Add(todo);
-		//	}
-
-		//	SaveTodoList();
-		//}
-
 		private void Todo_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			//var text = (sender as TextBox).Text;
-			//var todoItem = (sender as TextBox).DataContext as TodoItem;
-			//todoItem.Content = text;
-			//SaveTodoList();
+			var text = (sender as TextBox).Text;
+			var todoItem = (sender as TextBox).DataContext as TodoItem;
+			todoItem.Content = text;
+			SaveTodoList();
 		}
 
 		private void Pinned_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			//var text = (sender as TextBox).Text;
-			//var todoItem = (sender as TextBox).DataContext as TodoItem;
-			//todoItem.Content = text;
-			//SavePinnedList();
+			var text = (sender as TextBox).Text;
+			var todoItem = (sender as TextBox).DataContext as TodoItem;
+			todoItem.Content = text;
+			SavePinnedList();
 		}
 
-		private void SetTheme(bool isLight)
+		private void SetTheme(bool isLight, bool isHighContrast)
 		{
+
 			if (isLight)
 			{
 				App.Current.Resources["Foreground"] =			App.Current.Resources["LightForeground"];
-				App.Current.Resources["Alert"] =				App.Current.Resources["LightAlert"];
-				App.Current.Resources["Warning"] =				App.Current.Resources["LightWarning"];
-				App.Current.Resources["OK"] =					App.Current.Resources["LightOK"];
 				App.Current.Resources["HighlightBackground"] =	App.Current.Resources["LightHighlightBackground"];
 				App.Current.Resources["PressedBackground"] =	App.Current.Resources["LightPressedBackground"];
 				App.Current.Resources["Background"] =			App.Current.Resources["DarkBackground"];
@@ -398,12 +382,49 @@ namespace ToDue2
 			else
 			{
 				App.Current.Resources["Foreground"] =			App.Current.Resources["DarkForeground"];
-				App.Current.Resources["Alert"] =				App.Current.Resources["DarkAlert"];
-				App.Current.Resources["Warning"] =				App.Current.Resources["DarkWarning"];
-				App.Current.Resources["OK"] =					App.Current.Resources["DarkOK"];
 				App.Current.Resources["HighlightBackground"] =	App.Current.Resources["DarkHighlightBackground"];
 				App.Current.Resources["PressedBackground"] =	App.Current.Resources["DarkPressedBackground"];
 				App.Current.Resources["Background"] =			App.Current.Resources["LightBackground"];
+			}
+
+			if (isHighContrast)
+			{
+				App.Current.Resources["HoverRed"] = App.Current.Resources["RedAlert"];
+			}
+			else
+			{
+				App.Current.Resources["HoverRed"] = App.Current.Resources["InfoHighlight"];
+			}
+
+			if (isHighContrast)
+			{
+				if (isLight)
+				{
+					App.Current.Resources["Alert"] =			App.Current.Resources["LightHCAlert"];
+					App.Current.Resources["Warning"] =			App.Current.Resources["LightHCWarning"];
+					App.Current.Resources["OK"] =				App.Current.Resources["LightHCOK"];
+				}
+				else
+				{
+					App.Current.Resources["Alert"] =			App.Current.Resources["DarkHCAlert"];
+					App.Current.Resources["Warning"] =			App.Current.Resources["DarkHCWarning"];
+					App.Current.Resources["OK"] =				App.Current.Resources["DarkHCOK"];
+				}
+			}
+			else
+			{
+				if (isLight)
+				{
+					App.Current.Resources["Alert"] = App.Current.Resources["LightAlert"];
+					App.Current.Resources["Warning"] = App.Current.Resources["LightWarning"];
+					App.Current.Resources["OK"] = App.Current.Resources["LightOK"];
+				}
+				else
+				{
+					App.Current.Resources["Alert"] = App.Current.Resources["DarkAlert"];
+					App.Current.Resources["Warning"] = App.Current.Resources["DarkWarning"];
+					App.Current.Resources["OK"] = App.Current.Resources["DarkOK"];
+				}
 			}
 		}
 
@@ -416,23 +437,33 @@ namespace ToDue2
 			MessageBoxImage.Information,
 			MessageBoxResult.Yes);
 
-		private void CustomDatePicker_SelectedDateChanged(object sender, UselessRoutedEventArgs e)
-		{
-			//var date = (sender as CustomDatePicker).SelectedDate;
-			//var todo = (sender as CustomDatePicker).DataContext as TodoItem;
-			//todo.DueDate = date ?? DateTime.MinValue;
-
-			//if (Settings.Default.DoesReorderTodo && TodoItems.Contains(todo))
-			//{
-			//	TodoItems.Reorder();
-			//}
-
-			//SaveTodoList();
-		}
-
 		private void DueDate_SelectedDateChanged(object sender, UselessRoutedEventArgs e)
 		{
 			DisplayedDueDate = DueDate.SelectedDate ?? DateTime.MinValue;
+		}
+
+		private void HighContrast_Checked(object sender, RoutedEventArgs e)
+		{
+			Monochrome.IsChecked = false;
+			Settings.Default.IsHighContrast = true;
+			Settings.Default.Save();
+		}
+
+		private void HighContrast_Unchecked(object sender, RoutedEventArgs e)
+		{
+			Monochrome.IsChecked = true;
+		}
+
+		private void Monochrome_Checked(object sender, RoutedEventArgs e)
+		{
+			HighContrast.IsChecked = false;
+			Settings.Default.IsHighContrast = false;
+			Settings.Default.Save();
+		}
+
+		private void Monochrome_Unchecked(object sender, RoutedEventArgs e)
+		{
+			HighContrast.IsChecked = true;
 		}
 	}
 }

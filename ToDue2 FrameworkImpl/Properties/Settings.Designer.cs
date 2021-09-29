@@ -178,5 +178,17 @@ namespace ToDue2.Properties {
                 this["DoesShowPopup"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IsHighContrast {
+            get {
+                return ((bool)(this["IsHighContrast"]));
+            }
+            set {
+                this["IsHighContrast"] = value;
+            }
+        }
     }
 }

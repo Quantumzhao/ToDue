@@ -233,7 +233,7 @@
 								</ControlTemplate>
 							</Setter.Value>
 						</Setter>
-						<Setter Property="TextElement.Foreground" Value="{DynamicResource RedAlert}"/>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource HoverRed}"/>
 						<Setter Property="Opacity" Value="1"/>
 					</Trigger.Setters>
 				</Trigger>
@@ -323,7 +323,7 @@
 								</ControlTemplate>
 							</Setter.Value>
 						</Setter>
-						<Setter Property="TextElement.Foreground" Value="{DynamicResource RedAlert}"/>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource HoverRed}"/>
 						<Setter Property="Opacity" Value="1"/>
 					</Trigger.Setters>
 				</Trigger>
@@ -344,13 +344,13 @@
 								</ControlTemplate>
 							</Setter.Value>
 						</Setter>
-						<Setter Property="TextElement.Foreground" Value="{DynamicResource RedAlert}"/>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource HoverRed}"/>
 						<Setter Property="Opacity" Value="1"/>
 					</Trigger.Setters>
 				</Trigger>
 				<Trigger Property="IsChecked" Value="True">
 					<Trigger.Setters>
-						<Setter Property="TextElement.Foreground" Value="{StaticResource RedAlert}"/>
+						<Setter Property="TextElement.Foreground" Value="{DynamicResource HoverRed}"/>
 						<Setter Property="Opacity" Value="1"/>
 					</Trigger.Setters>
 				</Trigger>
@@ -401,6 +401,20 @@
 						IsCheckable="True"
 						Checked="ShowBackground_Checked"
 						Unchecked="ShowBackground_Unchecked"/>
+					<MenuItem Header="Palette (reload required)">
+						<MenuItem 
+							x:Name="HighContrast" 
+							Header="High Contrast" 
+							IsCheckable="True"
+							Checked="HighContrast_Checked"
+							Unchecked="HighContrast_Unchecked"/>
+						<MenuItem 
+							x:Name="Monochrome" 
+							Header="Monochrome" 
+							IsCheckable="True"
+							Checked="Monochrome_Checked"
+							Unchecked="Monochrome_Unchecked"/>
+					</MenuItem>
 					<Separator/>
 					<MenuItem Header="Advanced">
 						<MenuItem 
@@ -594,7 +608,7 @@
 										TextWrapping="Wrap"
 										MaxLines="2"
 										TextChanged="Pinned_TextChanged"
-										Text="{Binding Path=Content, Mode=TwoWay}"/>
+										Text="{Binding Path=Content, Mode=OneWay}"/>
 								</Grid>
 								<local:CustomDatePicker
 									SelectedDate="{Binding Path=DueDate, Mode=OneWay}"
@@ -602,8 +616,7 @@
 									VerticalAlignment="Top"
 									Margin="0, 5, 30, 0"
 									BorderThickness="0"
-									Width="60"
-									SelectedDateChanged="CustomDatePicker_SelectedDateChanged"/>
+									Width="60"/>
 								<TextBlock
 									Style="{StaticResource Body}"
 									HorizontalAlignment="Right"
@@ -692,7 +705,7 @@
 										TextWrapping="Wrap"
 										MaxLines="2"
 										TextChanged="Todo_TextChanged"
-										Text="{Binding Path=Content, Mode=TwoWay}"/>
+										Text="{Binding Path=Content, Mode=OneWay}"/>
 								</Grid>
 								<local:CustomDatePicker
 									HorizontalAlignment="Right"
@@ -700,8 +713,7 @@
 									Margin="0, 5, 30, 0"
 									BorderThickness="0"
 									Width="60"
-									SelectedDate="{Binding Path=DueDate, Mode=TwoWay}"
-									SelectedDateChanged="CustomDatePicker_SelectedDateChanged"/>
+									SelectedDate="{Binding Path=DueDate, Mode=TwoWay}"/>
 								<TextBlock
 									Style="{StaticResource Body}"
 									HorizontalAlignment="Right"
@@ -831,8 +843,7 @@
 						HorizontalAlignment="Right"
 						BorderThickness="0"
 						Width="60"
-						SelectedDate="{Binding ElementName=Window, Path=DisplayedDueDate, Mode=OneWay}"
-						SelectedDateChanged="DueDate_SelectedDateChanged"/>
+						SelectedDate="{Binding ElementName=Window, Path=DisplayedDueDate, Mode=OneWay}"/>
 				</Grid>
 			</Grid>
 		</Grid>
