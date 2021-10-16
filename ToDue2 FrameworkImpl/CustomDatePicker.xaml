@@ -92,16 +92,18 @@
 			HorizontalAlignment="Center"
 			PlacementTarget="{Binding ElementName=Display}">
 			<Border BorderBrush="{DynamicResource Foreground}" BorderThickness="1" Background="White">
-				<Grid Height="Auto">
-					<Calendar 
+				<Grid Height="250">
+					<Viewbox Width="250" Height="230" HorizontalAlignment="Center" VerticalAlignment="Top">
+						<Calendar 
 						x:Name="Picker"
 						VerticalAlignment="Top" 
 						SelectedDate="{Binding ElementName=Control, Path=SelectedDate, Mode=TwoWay}"
 						BorderThickness="0"/>
+					</Viewbox>
 					<TextBlock 
 						Text="Or" 
 						FontSize="16" 
-						Margin="18,160,0,10" 
+						Margin="30,210,0,10" 
 						HorizontalAlignment="Left" 
 						Width="Auto" 
 						Height="Auto" 
@@ -111,7 +113,7 @@
 						Visibility="Visible" 
 						VerticalAlignment="Bottom"
 						Checked="IndefiniteToggle_Checked"
-						Unchecked="IndefiniteToggle_Unchecked" Height="24" Margin="51,0,8,8" Content="No Due Date" FontSize="16">
+						Unchecked="IndefiniteToggle_Unchecked" Height="30" Margin="60,10,16,12" Content="No Due Date" FontSize="16">
 						<ToggleButton.Style>
 							<Style TargetType="ToggleButton">
 								<Style.Triggers>
