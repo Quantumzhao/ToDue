@@ -22,6 +22,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using ToDue2.Properties;
+using ToDue2.Resources;
 
 namespace ToDue2
 {
@@ -429,10 +430,8 @@ namespace ToDue2
 		}
 
 		public static MessageBoxResult ShowConfirmationMessage() => MessageBox.Show(
-			"The \"Auto reorder option\" is enabled which stops you from this operation" +
-			"\n Do you want to turn off this setting? " +
-			"\n This notification will not show up again. ",
-			"Info",
+			Labels.ConfirmationMessageText,
+			Labels.ConfirmationMessageTitle,
 			MessageBoxButton.YesNo,
 			MessageBoxImage.Information,
 			MessageBoxResult.Yes);

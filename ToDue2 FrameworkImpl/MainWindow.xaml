@@ -378,61 +378,61 @@
 			ToolTipText="ToDue2">
 			<tb:TaskbarIcon.ContextMenu>
 				<ContextMenu>
-					<MenuItem Header="Opacity">
+                    <MenuItem Header="{Binding Labels.MenuItemTitleOpacity, Source={StaticResource R}}">
 						<MenuItem Header="25%" Click="Transparency_Click" Tag="0.25"/>
 						<MenuItem Header="50%" Click="Transparency_Click" Tag="0.5"/>
 						<MenuItem Header="75%" Click="Transparency_Click" Tag="0.75"/>
 						<MenuItem Header="100%" Click="Transparency_Click" Tag="1"/>
 					</MenuItem>
-					<MenuItem Header="Scale">
-						<MenuItem Header="Small" Click="Scale_Click" Tag="0.5"/>
-						<MenuItem Header="Normal" Click="Scale_Click" Tag="0.75"/>
-						<MenuItem Header="Large" Click="Scale_Click" Tag="1"/>
+                    <MenuItem Header="{Binding Labels.MenuItemTitleScale, Source={StaticResource R}}">
+                        <MenuItem Header="{Binding Labels.MenuItemScaleSmall, Source={StaticResource R}}" Click="Scale_Click" Tag="0.5"/>
+                        <MenuItem Header="{Binding Labels.MenuItemScaleNormal, Source={StaticResource R}}" Click="Scale_Click" Tag="0.75"/>
+                        <MenuItem Header="{Binding Labels.MenuItemScaleLarge, Source={StaticResource R}}" Click="Scale_Click" Tag="1"/>
 					</MenuItem>
 					<MenuItem 
 						x:Name="Dark" 
-						Header="Dark (Reload required)" 
+						Header="{Binding Labels.MenuItemDark, Source={StaticResource R}}" 
 						IsCheckable="True"
 						Checked="Theme_Checked" 
 						Unchecked="Theme_UnChecked"/>
 					<MenuItem
 						x:Name="ShowBackground"
-						Header="Show background"
+						Header="{Binding Labels.MenuItemShowBackground, Source={StaticResource R}}"
 						IsCheckable="True"
 						Checked="ShowBackground_Checked"
 						Unchecked="ShowBackground_Unchecked"/>
-					<MenuItem Header="Palette (reload required)">
+                    <MenuItem Header="{Binding Labels.MenuItemTitlePalette, Source={StaticResource R}}">
 						<MenuItem 
 							x:Name="HighContrast" 
-							Header="High Contrast" 
+							Header="{Binding Labels.MenuItemHighContrast, Source={StaticResource R}}" 
 							IsCheckable="True"
 							Checked="HighContrast_Checked"
 							Unchecked="HighContrast_Unchecked"/>
 						<MenuItem 
 							x:Name="Monochrome" 
-							Header="Monochrome" 
+							Header="{Binding Labels.MenuItemMonochrome, Source={StaticResource R}}" 
 							IsCheckable="True"
 							Checked="Monochrome_Checked"
 							Unchecked="Monochrome_Unchecked"/>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="Advanced">
+                    <MenuItem Header="{Binding Labels.MenuItemTitleAdvanced, Source={StaticResource R}}">
 						<MenuItem 
-							Header="Reset position" 
+							Header="{Binding Labels.MenuItemAdvancedReset, Source={StaticResource R}}" 
 							Click="Reset_Click"/>
 						<MenuItem 
-							Header="Refresh" 
+							Header="{Binding Labels.MenuItemAdvancedRefresh, Source={StaticResource R}}" 
 							Click="Refresh_Click"/>
 						<MenuItem
 							x:Name="AutoReorder"
-							Header="Automatically reorder todo"
+							Header="{Binding Labels.MenuItemAdvancedAutoReorder, Source={StaticResource R}}"
 							IsCheckable="True"
 							Checked="AutoReorder_Checked"
 							Unchecked="AutoReorder_Unchecked"/>
 						<Separator/>
 					</MenuItem>
 					<Separator/>
-					<MenuItem Header="Exit" Click="Exit_Click" />
+                    <MenuItem Header="{Binding Labels.MenuItemExit, Source={StaticResource R}}" Click="Exit_Click" />
 				</ContextMenu>
 			</tb:TaskbarIcon.ContextMenu>
 		</tb:TaskbarIcon>
@@ -817,7 +817,7 @@
 						</TextBox>
 						<TextBlock 
 							IsHitTestVisible="False" 
-							Text="Something to do ..." 
+							Text="{Binding Labels.MainPageTipText, Source={StaticResource R}}" 
 							VerticalAlignment="Center" 
 							HorizontalAlignment="Left" 
 							Margin="10,0,0,0" 
