@@ -4,7 +4,9 @@
              xmlns:local="clr-namespace:ToDue2"
              StartupUri="MainWindow.xaml">
 	<Application.Resources>
-		<SolidColorBrush x:Key="LightAlert" Color="#FF67A5E0"/>
+        <local:ApplicationResources x:Key="R"/>
+        
+        <SolidColorBrush x:Key="LightAlert" Color="#FF67A5E0"/>
 		<SolidColorBrush x:Key="DarkAlert" Color="#FF406E99"/>
 		<SolidColorBrush x:Key="LightHCAlert" Color="#FFFFAEBB"/>
 		<SolidColorBrush x:Key="DarkHCAlert" Color="#FFBE6878"/>
