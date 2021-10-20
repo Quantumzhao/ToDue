@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ConfirmationMessageText" xml:space="preserve">
-    <value>由于开启了“自动排序“，你无法设置该功能，是否希望关闭“自动排序”？该通知将不会再次显示。</value>
+    <value>“自动排序”的设置默认开启，所以此操作无法正常工作。是否要关闭此设置？该通知仅显示一次。</value>
   </data>
   <data name="ConfirmationMessageTitle" xml:space="preserve">
     <value>提示</value>
   </data>
   <data name="MainPageTipText" xml:space="preserve">
-    <value>写一些需要做的事情......</value>
+    <value>一些要做的事情……</value>
   </data>
   <data name="MenuItemAdvancedAutoReorder" xml:space="preserve">
     <value>自动排序</value>
